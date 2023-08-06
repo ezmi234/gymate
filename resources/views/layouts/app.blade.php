@@ -15,13 +15,49 @@
 
     <!-- Scripts -->
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
+
+    <style>
+        .search-container {
+            position: relative;
+        }
+    
+        #searchResults {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            background-color: #fff;
+            border: 1px solid #ced4da;
+            border-top: none;
+            border-radius: 0 0 0.25rem 0.25rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            max-height: 200px; /* Add a max-height to limit the results' height */
+            overflow-y: auto; /* Enable vertical scrolling if needed */
+        }
+    
+        #searchResults ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+    
+        #searchResults li {
+            padding: 5px 10px;
+            cursor: pointer;
+            z-index: 1;
+        }
+    
+        #searchResults li:hover {
+            background-color: #f8f9fa;
+        }
+    </style>
 </head>
 <body>
     <div id="app">
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
-                    {{ config('app.name', 'Laravel') }}
+                     Gymate
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>
@@ -57,13 +93,18 @@
                                 <a class="nav-link" href="{{-- route('users.index') --}}">Users</a>
                             </li>
 
-                            <!-- Search -->
-                            <li class="nav-item">
-                                <form class="d-flex" action="{{ route('search') }}" method="GET">
-                                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="search">
-                                    <button class="btn btn-outline-success" type="submit">Search</button>
+                            <div class="search-container">
+                                <!-- Search Users with ajax -->
+                                <form id="searchForm" class="d-flex">
+                                    <input id="searchInput" class="form-control me-2" type="search" placeholder="Search users" aria-label="Search">
+                                    <button class="btn btn-outline-primary" type="button" id="searchButton">Search</button>
                                 </form>
-                            </li>
+                            
+                                <div id="searchResults" class="mt-1 border-0">
+                                    <!-- AJAX results will be displayed here -->
+                                </div>
+                            </div>
+                            
 
 
                         @endauth
@@ -113,4 +154,39 @@
         </main>
     </div>
 </body>
+
+<script>
+    // Function to trigger the search on input change
+    function triggerSearch() {
+        const searchTerm = document.getElementById('searchInput').value;
+        const searchResults = document.getElementById('searchResults');
+
+        if (searchTerm.trim() === '') {
+            // If the search term is empty, hide the search results container
+            searchResults.style.display = 'none';
+        } else {
+            // If there is a search term, show the search results container and make the AJAX request
+            searchResults.style.display = 'block';
+            fetch('{{ route('search') }}?term=' + searchTerm)
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('searchResults').innerHTML = data;
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+    }
+
+    // AJAX Search functionality on input change
+    document.getElementById('searchInput').addEventListener('input', function () {
+        triggerSearch();
+    });
+
+    // Call the triggerSearch function on page load to show initial results
+    document.addEventListener('DOMContentLoaded', function () {
+        triggerSearch();
+    });
+</script>
+
 </html>

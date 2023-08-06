@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Foundation\Auth\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -37,11 +38,15 @@ class HomeController extends Controller
         return view('userHome');
     }
 
-    public function searchUser(Request $request)
+    public function search(Request $request)
     {
-        $search = $request->get('search');
-        $users = DB::table('users')->where('name', 'like', '%'.$search.'%')->paginate(5);
-        dd($users);
-        return view('home', ['users' => $users]);
+        $searchTerm = $request->input('term');
+
+        // Perform your search logic here, e.g., search users by name or any other criteria
+        $users = User::where('name', 'like', '%' . $searchTerm . '%')
+                    ->limit(5)
+                    ->get();
+
+        return view('search-results', compact('users'));
     }
 }
