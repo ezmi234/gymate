@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class HomeController extends Controller
 {
@@ -24,5 +25,23 @@ class HomeController extends Controller
     public function index()
     {
         return view('home');
+    }
+
+    public function adminHome()
+    {
+        return view('adminHome');
+    }
+
+    public function userHome()
+    {
+        return view('userHome');
+    }
+
+    public function searchUser(Request $request)
+    {
+        $search = $request->get('search');
+        $users = DB::table('users')->where('name', 'like', '%'.$search.'%')->paginate(5);
+        dd($users);
+        return view('home', ['users' => $users]);
     }
 }

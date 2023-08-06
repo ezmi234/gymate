@@ -7,7 +7,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>Gymate</title>
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.bunny.net">
@@ -35,6 +35,42 @@
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav me-auto">
 
+                    </ul>
+
+                    <!-- Center Side Of Navbar -->
+                    <ul class="navbar-nav mx-auto">
+                        <li class="nav-item">
+                            <a class="nav-link  {{ request()->is('home*') ? 'active' : '' }}"
+                                 href="{{ route('home') }}">Home</a>
+                        </li>
+
+                        @auth
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{-- route('workouts.index') --}}">Workouts</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{-- route('exercises.index') --}}">Exercises</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{-- route('routines.index') --}}">Routines</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{-- route('programs.index') --}}">Programs</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{-- route('users.index') --}}">Users</a>
+                            </li>
+
+                            <!-- Search -->
+                            <li class="nav-item">
+                                <form class="d-flex" action="{{ route('search') }}" method="GET">
+                                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="search">
+                                    <button class="btn btn-outline-success" type="submit">Search</button>
+                                </form>
+                            </li>
+
+
+                        @endauth
                     </ul>
 
                     <!-- Right Side Of Navbar -->
