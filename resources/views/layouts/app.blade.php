@@ -10,54 +10,18 @@
     <title>Gymate</title>
 
     <!-- Fonts -->
-    <link rel="dns-prefetch" href="//fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
 
     <!-- Scripts -->
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
 
-    <style>
-        .search-container {
-            position: relative;
-        }
-    
-        #searchResults {
-            position: absolute;
-            top: 100%;
-            left: 0;
-            width: 100%;
-            background-color: #fff;
-            border: 1px solid #ced4da;
-            border-top: none;
-            border-radius: 0 0 0.25rem 0.25rem;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            max-height: 200px; /* Add a max-height to limit the results' height */
-            overflow-y: auto; /* Enable vertical scrolling if needed */
-        }
-    
-        #searchResults ul {
-            list-style-type: none;
-            padding: 0;
-            margin: 0;
-        }
-    
-        #searchResults li {
-            padding: 5px 10px;
-            cursor: pointer;
-            z-index: 1;
-        }
-    
-        #searchResults li:hover {
-            background-color: #f8f9fa;
-        }
-    </style>
+   
 </head>
 <body>
     <div id="app">
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
-                     Gymate
+                     <h3>Gymate</h3>
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>
@@ -71,12 +35,12 @@
                     
                     <!-- Center Side Of Navbar -->
                     <ul class="navbar-nav mx-auto">
-                        <li class="nav-item">
-                            <a class="nav-link  {{ request()->is('home*') ? 'active' : '' }}"
-                                 href="{{ route('home') }}">Home</a>
-                        </li>
-
                         @auth
+                            <li class="nav-item">
+                                <a class="nav-link  {{ request()->is('home*') ? 'text-primary' : '' }}"
+                                    href="{{ route('home') }}">Home</a>
+                            </li>
+
                             <li class="nav-item">
                                 <a class="nav-link" href="{{-- route('workouts.index') --}}">Workouts</a>
                             </li>
