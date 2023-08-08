@@ -49,4 +49,15 @@ class HomeController extends Controller
 
         return view('search-results', compact('users'));
     }
+
+    public function searchView(Request $request)
+    {
+        $searchTerm = $request->input('term');
+
+        // Perform your search logic here, e.g., search users by name or any other criteria
+        $users = User::where('name', 'like', '%' . $searchTerm . '%')
+                    ->get();
+
+        return view('search-user', compact('users'));
+    }
 }

@@ -151,6 +151,11 @@
     document.addEventListener('DOMContentLoaded', function () {
         triggerSearch();
     });
+
+    document.getElementById('searchButton').addEventListener('click', function () {
+    const searchTerm = document.getElementById('searchInput').value;
+    window.location.href = '{{ route('searchView') }}?term=' + searchTerm;
+    });
 </script>
 
 </html>
