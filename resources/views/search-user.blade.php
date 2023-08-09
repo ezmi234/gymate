@@ -7,7 +7,7 @@
             @foreach ($users as $user)
                 <div class="card mt-2">
                     <div class="card-header">
-                        <a href="{{-- route('profile',$user->id) --}}">{{ $user->name }}</a>
+                        <a href="{{ route('users.show',$user->id) }}">{{ $user->name }}</a>
                     </div>
                     <div class="card-body">
                         <p>{{ $user->email }}</p>

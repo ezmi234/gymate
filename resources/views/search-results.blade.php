@@ -3,7 +3,11 @@
 @if($users->count() > 0)
     <ul class="list-group">
         @foreach($users as $user)
-            <li class="list-group-item">{{ $user->name }}</li>
+            <li class="list-group-item">
+                <a href="{{ route('users.show',$user->id) }}" style="text-decoration: none; color: inherit">
+                    {{ $user->name }}
+                </a>
+            </li>
         @endforeach
     </ul>
 @else
