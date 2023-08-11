@@ -9,18 +9,61 @@
     }
 </style>
 
+<div class="modal fade" id="followersModal" tabindex="-1" role="dialog" aria-labelledby="followersModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-fullscreen-sm-down" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="followersModalLabel">Followers</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                
+                <h1>prova</h1>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="container mt-5">
     <div class="row">
         <div class="col-md-4">
             <div class="card">
                 <img src="{{ asset('images/jk-placeholder-image.jpg') }}" alt="Your Image" class="img-fluid">
                 <div class="card-body">
-                    <h5 class="card-title">John Doe</h5>
+                    <div style="display:flex; flex-flow: wrap; align-items:baseline; justify-content: space-between;">
+                        <h5 class="card-title">{{ $user->name }}</h5>
+                        @if(Auth::user()->id != $user->id)
+                            <button class="follow-button btn btn-block {{ auth()->user()->isFollowing($user) ? 'btn-danger' : 'btn-primary' }}"
+                             data-user-id="{{ $user->id }}">
+                                {{ auth()->user()->isFollowing($user) ? 'Unfollow' : 'Follow' }}
+                            </button>
+                        @else
+                            <a href="#" class="btn btn-success btn-block">Edit Profile</a>
+                        @endif
+                    </div>
                     <p class="card-text">Web Developer</p>
                     <p class="card-text">Location: New York</p>
                     <p class="card-text">Joined: January 2022</p>
                 </div>
             </div>
+
+            <div class="card text-center mt-3" style="display:flex; flex-flow: wrap;">
+                <div class="card-body">
+                    <h5 class="card-title">Workouts</h5>
+                    <p class="card-text">0</p>
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">Follows</h5>
+                    <p class="card-text">{{ $user->follows->count() }}</p>
+                </div>
+                <div class="card-body">
+                    <a href="#" style="text-decoration: none; color: inherit" data-bs-toggle="modal" data-bs-target="#followersModal">
+                        <h5 class="card-title">Followers</h5>
+                        <p id="followers" class="card-text">{{ $user->followers->count() }}</p>
+                    </a>
+                </div>
+            </div>
+
             <div class="card mt-3">
                 <div class="card-body">
                     <h5 class="card-title">About Me</h5>
@@ -53,4 +96,36 @@
         </div>
     </div>
 </div>
+
+<script>
+    const button = document.querySelector('.follow-button');
+    const followers = document.querySelector('#followers');
+    button.addEventListener('click', async () => {
+        const userId = button.getAttribute('data-user-id');
+        const isFollowing = button.textContent.trim() === 'Unfollow';
+
+        try {
+            const response = await axios.post(`/users/${isFollowing ? 'unfollow' : 'follow'}/${userId}`);
+            console.log(response.data.message);
+
+            // Update button text
+            button.textContent = isFollowing ? 'Follow' : 'Unfollow';
+            if(isFollowing){
+                button.classList.remove('btn-danger');
+                button.classList.add('btn-primary');
+                followers.textContent = parseInt(followers.textContent) - 1;
+            } else {
+                button.classList.remove('btn-primary');
+                button.classList.add('btn-danger');
+                followers.textContent = parseInt(followers.textContent) + 1;
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    });
+
+    
+</script>
+
+
 @endsection

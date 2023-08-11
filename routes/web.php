@@ -28,3 +28,5 @@ Route::get('/search', [App\Http\Controllers\HomeController::class, 'search'])->n
 Route::get('/searchView', [App\Http\Controllers\HomeController::class, 'searchView'])->name('searchView');
 
 Route::get('/users/show/{id}', [App\Http\Controllers\UserController::class, 'show'])->name('users.show');
+Route::post('/users/follow/{id}', [App\Http\Controllers\UserController::class, 'follow'])->name('users.follow');
+Route::post('/users/unfollow/{id}', [App\Http\Controllers\UserController::class, 'unfollow'])->name('users.unfollow');
