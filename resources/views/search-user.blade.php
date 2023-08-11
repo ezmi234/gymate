@@ -4,16 +4,9 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-8">
-            @foreach ($users as $user)
-                <div class="card mt-2">
-                    <div class="card-header">
-                        <a href="{{ route('users.show',$user->id) }}">{{ $user->name }}</a>
-                    </div>
-                    <div class="card-body">
-                        <p>{{ $user->email }}</p>
-                    </div>
-                </div>
-            @endforeach
+                 @foreach ($users as $user)
+                    @include('users.card', ['user' => $user])
+                 @endforeach
             </div>
         </div>
     </div>

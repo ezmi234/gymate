@@ -17,8 +17,25 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                
-                <h1>prova</h1>
+                @foreach ($user->followers as $follower)
+                    @include('users.card', ['user' => $follower])
+                @endforeach
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="followsModal" tabindex="-1" role="dialog" aria-labelledby="followsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-fullscreen-sm-down" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="followsModalLabel">Followers</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                @foreach ($user->follows as $follow)
+                    @include('users.card', ['user' => $follow])
+                @endforeach
             </div>
         </div>
     </div>
@@ -53,8 +70,10 @@
                     <p class="card-text">0</p>
                 </div>
                 <div class="card-body">
-                    <h5 class="card-title">Follows</h5>
-                    <p class="card-text">{{ $user->follows->count() }}</p>
+                    <a href="#" style="text-decoration: none; color: inherit" data-bs-toggle="modal" data-bs-target="#followsModal">
+                        <h5 class="card-title">Follows</h5>
+                        <p id="followers" class="card-text">{{ $user->follows->count() }}</p>
+                    </a>
                 </div>
                 <div class="card-body">
                     <a href="#" style="text-decoration: none; color: inherit" data-bs-toggle="modal" data-bs-target="#followersModal">

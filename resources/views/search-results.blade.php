@@ -1,5 +1,3 @@
-<!-- resources/views/search-results.blade.php -->
-
 @if($users->count() > 0)
     <ul class="list-group">
         @foreach($users as $user)

@@ -45,6 +45,10 @@ class UserController extends Controller
     public function follow($id)
     {
         $user = User::find($id);
+        if (auth()->user()->isFollowing($user)) {
+            auth()->user()->unfollow($user);
+            return response()->json(['message' => 'Successfully unfollowed.']);
+        }
         auth()->user()->follow($user);
         return response()->json(['message' => 'Successfully followed.']);
     }

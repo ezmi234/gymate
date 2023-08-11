@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Foundation\Auth\User;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -57,7 +57,8 @@ class HomeController extends Controller
         // Perform your search logic here, e.g., search users by name or any other criteria
         $users = User::where('name', 'like', '%' . $searchTerm . '%')
                     ->get();
-
-        return view('search-user', compact('users'));
+        return view('search-user')
+            ->with('users', $users)
+            ->with('allUsers', User::all());
     }
 }
