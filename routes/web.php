@@ -28,6 +28,9 @@ Route::get('/search', [App\Http\Controllers\HomeController::class, 'search'])->n
 Route::get('/searchView', [App\Http\Controllers\HomeController::class, 'searchView'])->name('searchView');
 
 Route::get('/users/show/{id}', [App\Http\Controllers\UserController::class, 'show'])->name('users.show');
+Route::get('/users/edit/{id}', [App\Http\Controllers\UserController::class, 'edit'])->name('users.edit');
+Route::post('/users/update/{id}', [App\Http\Controllers\UserController::class, 'update'])->name('users.update');
+Route::get('/users/profile', [App\Http\Controllers\UserController::class, 'profile'])->name('users.profile');
 Route::post('/users/follow/{id}', [App\Http\Controllers\UserController::class, 'follow'])->name('users.follow');
 Route::post('/users/unfollow/{id}', [App\Http\Controllers\UserController::class, 'unfollow'])->name('users.unfollow');
 Route::get('/users/followModal/{id}', [App\Http\Controllers\UserController::class, 'followModal'])->name('users.followModal');

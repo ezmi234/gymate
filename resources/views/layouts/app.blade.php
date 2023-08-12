@@ -43,19 +43,7 @@
                             </li>
 
                             <li class="nav-item">
-                                <a class="nav-link" href="{{-- route('workouts.index') --}}">Workouts</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{-- route('exercises.index') --}}">Exercises</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{-- route('routines.index') --}}">Routines</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{-- route('programs.index') --}}">Programs</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{-- route('users.index') --}}">Users</a>
+                                <a class="nav-link" href="{{-- route('notifications') --}}">Notifications</a>
                             </li>
 
                             <div class="search-container">
