@@ -60,5 +60,16 @@ class UserController extends Controller
         return response()->json(['message' => 'Successfully unfollowed.']);
     }
 
+    public function followModal($id)
+    {
+        $user = User::find($id);
+        if (auth()->user()->isFollowing($user)) {
+            auth()->user()->unfollow($user);
+            return redirect()->back()->with('success', 'Successfully unfollowed.');
+        }
+        auth()->user()->follow($user);
+        return redirect()->back()->with('success', 'Successfully followed.');
+    }
+
 
 }

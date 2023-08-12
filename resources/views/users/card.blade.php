@@ -17,22 +17,31 @@
         </div>
         <div class="px-3">
             <p class="small text-muted mb-1">Follows</p>
-            <p class="mb-0">{{ $user->follows->count() }}</p>
+            <p id="{{ (Auth::user()->id == $user->id) ? 'followsAuth' : ''}}" 
+                class="mb-0">{{ $user->follows->count() }}</p>
         </div>
         <div>
             <p class="small text-muted mb-1">Followers</p>
-            <p class="mb-0">{{ $user->followers->count() }}</p>
+            <p id="followers{{ $user->id }}" class="mb-0">{{ $user->followers->count() }}</p>
         </div>
         </div>
         <div class="d-flex pt-1">
         <a href="{{ route('users.show',$user->id) }}" class="btn btn-outline-primary me-1 flex-grow-1">View profile</a>
-        @if(Auth::user()->id != $user->id)
-            <button class="follow-button btn flex-grow-1 {{ auth()->user()->isFollowing($user) ? 'btn-danger' : 'btn-primary' }}"
-                data-user-id="{{ $user->id }}">
-                {{ auth()->user()->isFollowing($user) ? 'Unfollow' : 'Follow' }}
-            </button>
-        @else
-            <a href="#" class="btn btn-success flex-grow-1">Edit Profile</a>
+        @if($show && Auth::user()->id != $user->id)
+            @if(auth()->user()->isFollowing($user))
+                <a href="{{ route('users.followModal', $user->id) }}" class="btn btn-danger flex-grow-1">Unfollow</a>
+            @else
+                <a href="{{ route('users.followModal', $user->id) }}" class="btn btn-primary flex-grow-1">Follow</a>
+            @endif
+        @else    
+            @if(Auth::user()->id != $user->id)
+                <button class="follow-button-card btn btn-block flex-grow-1 {{ auth()->user()->isFollowing($user) ? 'btn-danger' : 'btn-primary' }}"
+                    data-user-id="{{ $user->id }}">
+                    {{ auth()->user()->isFollowing($user) ? 'Unfollow' : 'Follow' }}
+                </button>
+            @else
+                <a href="#" class="btn btn-success btn-block flex-grow-1">Edit Profile</a>
+            @endif
         @endif
         </div>
     </div>
@@ -40,29 +49,3 @@
 </div>
 </div>
 
-<script>
-    buttons = document.querySelectorAll('.follow-button');
-    buttons.forEach(button => {
-        button.addEventListener('click', function() {
-            let userId = this.dataset.userId;
-            let token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-            console.log(userId);
-            console.log(button);
-            fetch(`/users/follow/${userId}`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json, text-plain, */*',
-                    'X-Requested-With': 'XMLHttpRequest',
-                    'X-CSRF-TOKEN': token
-                },
-                body: JSON.stringify({
-                    userId: userId
-                })
-            })
-            .then(response => response.json()
-            
-            )
-        });
-    });
-</script>

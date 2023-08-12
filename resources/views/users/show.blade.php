@@ -18,7 +18,7 @@
             </div>
             <div class="modal-body">
                 @foreach ($user->followers as $follower)
-                    @include('users.card', ['user' => $follower])
+                    @include('users.card', ['user' => $follower, 'show' => true])
                 @endforeach
             </div>
         </div>
@@ -34,7 +34,7 @@
             </div>
             <div class="modal-body">
                 @foreach ($user->follows as $follow)
-                    @include('users.card', ['user' => $follow])
+                    @include('users.card', ['user' => $follow, 'show' => true])
                 @endforeach
             </div>
         </div>
@@ -72,7 +72,7 @@
                 <div class="card-body">
                     <a href="#" style="text-decoration: none; color: inherit" data-bs-toggle="modal" data-bs-target="#followsModal">
                         <h5 class="card-title">Follows</h5>
-                        <p id="followers" class="card-text">{{ $user->follows->count() }}</p>
+                        <p id="follows" class="card-text">{{ $user->follows->count() }}</p>
                     </a>
                 </div>
                 <div class="card-body">

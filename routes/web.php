@@ -30,3 +30,4 @@ Route::get('/searchView', [App\Http\Controllers\HomeController::class, 'searchVi
 Route::get('/users/show/{id}', [App\Http\Controllers\UserController::class, 'show'])->name('users.show');
 Route::post('/users/follow/{id}', [App\Http\Controllers\UserController::class, 'follow'])->name('users.follow');
 Route::post('/users/unfollow/{id}', [App\Http\Controllers\UserController::class, 'unfollow'])->name('users.unfollow');
+Route::get('/users/followModal/{id}', [App\Http\Controllers\UserController::class, 'followModal'])->name('users.followModal');
