@@ -40,7 +40,7 @@
     right: 30px;
     width: 100px;
     height: 100px;
-    background-color: #ff6f00;
+    background-color: #115199;
     color: #fff;
     border-radius: 50%;
     display: flex;
@@ -58,4 +58,13 @@
     100% {
         transform: translateY(-20px);
     }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.dropdown-menu.fade-in {
+    animation: fadeIn 0.3s ease-in-out;
 }
