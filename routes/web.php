@@ -20,6 +20,10 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/image', function () {
+    return view('image');
+});
+
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
@@ -30,6 +34,7 @@ Route::get('/searchView', [App\Http\Controllers\HomeController::class, 'searchVi
 Route::get('/users/show/{id}', [App\Http\Controllers\UserController::class, 'show'])->name('users.show');
 Route::get('/users/edit/{id}', [App\Http\Controllers\UserController::class, 'edit'])->name('users.edit');
 Route::post('/users/update/{id}', [App\Http\Controllers\UserController::class, 'update'])->name('users.update');
+Route::post('/users/complete_profile', [App\Http\Controllers\UserController::class, 'complete_profile'])->name('users.complete_profile');
 Route::get('/users/profile', [App\Http\Controllers\UserController::class, 'profile'])->name('users.profile');
 Route::post('/users/follow/{id}', [App\Http\Controllers\UserController::class, 'follow'])->name('users.follow');
 Route::post('/users/unfollow/{id}', [App\Http\Controllers\UserController::class, 'unfollow'])->name('users.unfollow');

@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
@@ -41,6 +43,31 @@ class UserController extends Controller
         $user->name = $request->input('name');
         $user->save();
         return redirect()->route('users.profile');
+    }
+
+    public function complete_profile(Request $request)
+    {
+        $user = Auth::user();
+
+        $data = $request->validate([
+            'profile_image' => ['nullable', 'image', 'mimes:png,jpg,jpeg,svg',  'max:2048'],
+            'location' => ['nullable', 'string', 'max:255'],
+            'about_me' => ['nullable', 'string', 'max:1000'],
+        ]);
+        
+        $data['profile_completed'] = true;
+
+        if ($request->hasFile('profile_image')) {
+            $image = $request->file('profile_image');
+            $name = time() . '.' . $image->getClientOriginalExtension();
+            $destinationPath = "public/images/profile";
+            $image->storeAs($destinationPath, $name);
+            $data['profile_image'] = $name;
+        }
+
+        $user->update($data);
+
+        return redirect()->back()->with('success', 'Profile updated successfully!');
     }
 
     public function follow($id)

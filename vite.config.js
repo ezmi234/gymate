@@ -11,4 +11,10 @@ export default defineConfig({
             refresh: true,
         }),
     ],
+    assetsInclude: ['**/*.png', '**/*.jpg', '**/*.jpeg', '**/*.gif', '**/*.svg'],
+    server: {
+    proxy: {
+        '/storage': 'http://gymate.test', // Replace with your actual Laravel URL
+    },
+    },
 });

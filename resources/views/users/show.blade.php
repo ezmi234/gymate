@@ -45,7 +45,11 @@
     <div class="row">
         <div class="col-md-4">
             <div class="card">
-                <img src="{{ asset('images/jk-placeholder-image.jpg') }}" alt="Your Image" class="img-fluid">
+                @if($user->profile_image)
+                    <img src="{{ asset('storage/images/profile/' . $user->profile_image) }}" alt="Profile Image" class="img-fluid">
+                @else
+                    <img src="{{ asset('images/jk-placeholder-image.jpg') }}" alt="Your Image" class="img-fluid">
+                @endif
                 <div class="card-body">
                     <div style="display:flex; flex-flow: wrap; align-items:baseline; justify-content: space-between;">
                         <h5 class="card-title">{{ $user->name }}</h5>

@@ -6,3 +6,16 @@ $body-bg: #f8fafc;
 $font-family: 'Bai Jamjuree', sans-serif;
 $font-size-base: 0.9rem;
 $line-height-base: 1.6;
+
+$white: #ffffff;
+
+$theme-colors: (
+    "light":      #d5d6d8,
+    "dark":       #070109,
+    "primary":    #115199,
+    "secondary":  #5c5c5d,
+    "info":       #eda533,
+    "success":    #0fa65f,
+    "warning":    #e4cb0f,
+    "danger":     #f31606,
+);
