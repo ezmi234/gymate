@@ -20,9 +20,6 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/image', function () {
-    return view('image');
-});
 
 Auth::routes();
 
@@ -39,3 +36,11 @@ Route::get('/users/profile', [App\Http\Controllers\UserController::class, 'profi
 Route::post('/users/follow/{id}', [App\Http\Controllers\UserController::class, 'follow'])->name('users.follow');
 Route::post('/users/unfollow/{id}', [App\Http\Controllers\UserController::class, 'unfollow'])->name('users.unfollow');
 Route::get('/users/followModal/{id}', [App\Http\Controllers\UserController::class, 'followModal'])->name('users.followModal');
+
+Route::get('/workouts/create', [App\Http\Controllers\WorkoutController::class, 'create'])->name('workouts.create');
+Route::post('/workouts/store', [App\Http\Controllers\WorkoutController::class, 'store'])->name('workouts.store');
+Route::get('/workouts/show/{id}', [App\Http\Controllers\WorkoutController::class, 'show'])->name('workouts.show');
+Route::get('/workouts/edit/{id}', [App\Http\Controllers\WorkoutController::class, 'edit'])->name('workouts.edit');
+// Route::post('/workouts/update/{id}', [App\Http\Controllers\WorkoutController::class, 'update'])->name('workouts.update');
+// Route::post('/workouts/destroy/{id}', [App\Http\Controllers\WorkoutController::class, 'destroy'])->name('workouts.destroy');
+Route::get('/workouts/fetchAll', [App\Http\Controllers\WorkoutController::class, 'fetchAll'])->name('workouts.fetchAll');

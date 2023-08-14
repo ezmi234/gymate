@@ -50,6 +50,58 @@
     </div>
 </div>
 
+<!-- Add new workout modal -->
+<div class="modal fade" id="newWorkoutModal" tabindex="-1" aria-labelledby="newWorkoutModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="newWorkoutModalLabel">New Workout</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <!-- Form -->
+            <form action="{{ route('workouts.store') }}" method="POST" enctype="multipart/form-data">
+                @csrf
+                <div class="mb-3">
+                <label for="title" class="form-label">Title</label>
+                <input type="text" class="form-control" id="title" name="title" placeholder="Enter title">
+                </div>
+                <div class="mb-3">
+                <label for="type" class="form-label">Image</label>
+                <input type="file" class="form-control" id="image" name="image">
+                </div>
+                <div class="mb-3">
+                <label for="description" class="form-label">Description</label>
+                <textarea class="form-control" id="description" name="description" rows="3" placeholder="Enter description"></textarea>
+                </div>
+                <div class="mb-3">
+                <label for="location" class="form-label">Location</label>
+                <input type="text" class="form-control" id="location" name="location" placeholder="Enter location">
+                </div>
+                <div class="mb-3">
+                <label for="date" class="form-label">Date</label>
+                <input type="date" class="form-control" id="date" name="date">
+                </div>
+                <div class="mb-3">
+                <label for="time" class="form-label">Time</label>
+                <input type="time" class="form-control" id="time" name="time">
+                </div>
+                <div class="mb-3">
+                <label for="duration" class="form-label">Duration</label>
+                <input type="number" class="form-control" id="duration" name="duration" placeholder="Enter duration">
+                </div>
+                <div class="mb-3">
+                <label for="distance" class="form-label">Capacity</label>
+                <input type="number" class="form-control" id="capacity" name="capacity" placeholder="Enter capacity">
+                </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
 
 <div class="container mt-md-2">
@@ -114,7 +166,7 @@
                         <h5>Workouts</h5>
                         @if(Auth::user()->id == $user->id)
                             <!-- Button trigger modal -->
-                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newWorkoutModal">
                                 Add Workout
                             </button>
                         @endif
@@ -172,8 +224,27 @@
             console.error(error);
         }
     });
-
     
+</script>
+
+<script>
+    $(function() {
+        fetchAllWorkouts();
+
+        function fetchAllWorkouts() {
+            $.ajax({
+                url: '{{ route('workouts.fetchAll') }}',
+                type: 'GET',
+                dataType: 'json',
+                success: function(data) {
+                    console.log(data);
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+            });
+        }
+    });
 </script>
 
 
