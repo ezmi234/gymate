@@ -19,7 +19,7 @@
 </head>
 <body>
     <div id="app">
-        <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
+        <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm fixed-top">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
                      <h3>Gymate</h3>
@@ -85,7 +85,7 @@
                                 </a>
                             
                                 <div class="dropdown-menu dropdown-menu-right fade-in" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="{{-- route('profile', auth()->user()->username) --}}">
+                                    <a class="dropdown-item" href="{{ route('users.show', auth()->user()) }}">
                                         Profile
                                     </a>
                             
@@ -111,7 +111,7 @@
             </div>
         </nav>
 
-        <main class="py-4">
+        <main style="margin-top: 80px;">
             @yield('content')
         </main>
     </div>
