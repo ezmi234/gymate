@@ -4,11 +4,11 @@
     <div class="flex-shrink-0">
         @if($user->profile_image)
             <img src="{{ asset('storage/images/profile/' . $user->profile_image) }}" alt="Profile Image" class="img-fluid"
-            style="width: 180px; border-radius: 10px;">
+            style="width: 180px; height: 180px; border-radius: 10px;">
         @else
             <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-profiles/avatar-1.webp"
             alt="Generic placeholder image" class="img-fluid"
-            style="width: 180px; border-radius: 10px;">
+            style="width: 180px; height: 180px; border-radius: 10px;">
         @endif
     </div>
     <div class="flex-grow-1 ms-3">
@@ -22,7 +22,7 @@
         </div>
         <div class="px-3">
             <p class="small text-muted mb-1">Follows</p>
-            <p id="{{ (Auth::user()->id == $user->id) ? 'followsAuth' : ''}}" 
+            <p id="{{ (Auth::user()->id == $user->id) ? 'followsAuth' : ''}}"
                 class="mb-0">{{ $user->follows->count() }}</p>
         </div>
         <div>
@@ -38,7 +38,7 @@
             @else
                 <a href="{{ route('users.followModal', $user->id) }}" class="btn btn-primary flex-grow-1">Follow</a>
             @endif
-        @else    
+        @else
             @if(Auth::user()->id != $user->id)
                 <button class="follow-button-card btn btn-block flex-grow-1 {{ auth()->user()->isFollowing($user) ? 'btn-danger' : 'btn-primary' }}"
                     data-user-id="{{ $user->id }}">

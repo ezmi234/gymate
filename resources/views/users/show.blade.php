@@ -8,6 +8,26 @@
         overflow-y: auto;
         margin-bottom: 1rem;
     }
+
+    .image-container {
+        position: relative;
+        overflow: hidden;
+    }
+
+    .image-container::before {
+        content: "";
+        display: block;
+        padding-top: 100%; /* This creates a square with 1:1 aspect ratio */
+    }
+
+    .image-container img {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover; /* Maintain aspect ratio and cover the container */
+    }
 </style>
 
 <div class="modal fade" id="followersModal" tabindex="-1" role="dialog" aria-labelledby="followersModalLabel" aria-hidden="true">
@@ -108,11 +128,13 @@
     <div class="row">
         <div class="col-md-4">
             <div class="card">
+                <div class="image-container d-flex align-items-center">
                 @if($user->profile_image)
                     <img src="{{ asset('storage/images/profile/' . $user->profile_image) }}" alt="Profile Image" class="img-fluid rounded">
                 @else
                     <img src="{{ asset('images/jk-placeholder-image.jpg') }}" alt="Your Image" class="img-fluid rounded">
                 @endif
+                </div>
                 <div class="card-body">
                     <div style="display:flex; flex-flow: wrap; align-items:baseline; justify-content: space-between;">
                         <h5 class="card-title">{{ $user->name }}</h5>
@@ -245,6 +267,32 @@
             });
         });
 
+        // delete employee ajax request
+      $(document).on('click', '.deleteIcon', function(e) {
+        e.preventDefault();
+        let id = $(this).attr('id');
+        let csrf = '{{ csrf_token() }}';
+        $.ajax({
+            url: '{{ route('workouts.delete') }}',
+            method: 'delete',
+            data: {
+            id: id,
+            _token: csrf
+            },
+            success: function(data) {
+                console.log('success');
+                console.log(data);
+                if(data.status == 200) {
+                    fetchAllWorkouts();
+                }
+            },
+            error: function(error) {
+                console.log('error');
+                console.log(error);
+            }
+        });
+        });
+
         fetchAllWorkouts();
 
         function fetchAllWorkouts() {
@@ -260,6 +308,7 @@
                 error: function(error) {
                     console.log('error');
                     console.log(error);
+                    $('#workouts').html('<p class="text-center">No workouts yet.</p>');
                 }
             });
         }

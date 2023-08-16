@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Workout;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class WorkoutController extends Controller
 {
@@ -29,7 +30,10 @@ class WorkoutController extends Controller
                         <h5 class="card-title">'.$workout->title.'</h5>';
 
             if(Auth::user()->id == $workout->user_id){
-                $output .= '<a href="#" class="btn btn-success btn-block">Edit</a>';
+                $output .= '<div>
+                <a href="#" id="' . $workout->id . '" class="text-success mx-1 editIcon" data-bs-toggle="modal" data-bs-target="#editWorkoutModal"><i class="bi-pencil-square h4"></i></a>
+                <a href="#" id="' . $workout->id . '" class="text-danger mx-1 deleteIcon"><i class="bi-trash h4"></i></a>
+                </div>';
             }
 
             $output .= '</div>
@@ -73,6 +77,17 @@ class WorkoutController extends Controller
 
         $workout = Workout::create($data);
 
+        return response()->json([
+            'status' => 200,
+        ]);
+    }
+
+    public function delete(Request $request) {
+        $id = $request->id;
+        $workout = Workout::find($id);
+        if (Storage::delete('public/images/workouts/'.$workout->image)) {
+            Workout::destroy($id);
+        }
         return response()->json([
             'status' => 200,
         ]);
