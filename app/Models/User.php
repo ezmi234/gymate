@@ -72,5 +72,10 @@ class User extends Authenticatable
         return $this->follows()->detach($user->id);
     }
 
-    
+    public function workouts()
+    {
+        return $this->hasMany(Workout::class);
+    }
+
+
 }

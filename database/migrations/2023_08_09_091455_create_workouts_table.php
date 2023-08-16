@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('description');
             $table->string('location');
             $table->dateTime('date');
+            $table->time('time');
             $table->integer('duration');
             $table->integer('capacity');
             $table->unsignedBigInteger('user_id');

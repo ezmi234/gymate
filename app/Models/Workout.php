@@ -15,6 +15,7 @@ class Workout extends Model
         'description',
         'location',
         'date',
+        'time',
         'duration',
         'capacity',
         'user_id',

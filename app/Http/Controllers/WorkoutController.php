@@ -15,82 +15,72 @@ class WorkoutController extends Controller
 
     public function fetchAll()
     {
-        $workouts = Workout::where('user_id', Auth::user()->user_id)->get();
+        $workouts = Workout::where('user_id', Auth::user()->id)->get();
+        $output = '';
         if ($workouts->isEmpty()) {
-            return response()->json(['message' => 'No workouts found']);
+            return response()->json(['message' => 'No workouts found'], 404);
         }
-        return response()->json($workouts);
-    }
+        foreach ($workouts as $workout){
+            $path = asset('storage/images/workouts/'.$workout->image);
+            $output .='<div class="card mb-4">
+                <img src="'.$path.'" alt="Workout image" class="img-fluid rounded" style="height: 40vh">
+                <div class="card-body">
+                    <div style="display:flex; flex-flow: wrap; align-items:baseline; justify-content: space-between;">
+                        <h5 class="card-title">'.$workout->title.'</h5>';
 
-    public function create()
-    {
-        return view('workouts.create');
+            if(Auth::user()->id == $workout->user_id){
+                $output .= '<a href="#" class="btn btn-success btn-block">Edit</a>';
+            }
+
+            $output .= '</div>
+                        <p class="card-text">Description: '.$workout->description.'</p>
+                        <p class="card-text">Location: '.$workout->location.'</p>
+                        <p class="card-text">Date: '.$workout->date.'</p>
+                        <p class="card-text">Time: '.$workout->time.'</p>
+                        <p class="card-text">Duration: '.$workout->duration.'</p>
+                        <p class="card-text">Capacity: '.$workout->capacity.'</p>
+                    </div>
+                </div>';
+        }
+        return response()->json([
+            'status' => 200,
+            'html' => $output,
+        ]);
     }
 
     public function store(Request $request)
     {
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'image' => 'required|string|max:255',
-            'description' => 'required|string|max:255',
-            'location' => 'required|string|max:255',
-            'date' => 'required|date',
-            'duration' => 'required|integer',
-            'capacity' => 'required|integer',
+        $data = $request->validate([
+            'title' => ['required', 'string', 'max:255'],
+            'image' => ['nullable', 'image', 'mimes:png,jpg,jpeg,svg',  'max:2048'],
+            'description' => ['required', 'string', 'max:1000'],
+            'location' => ['required', 'string', 'max:255'],
+            'date' => ['required', 'date'],
+            'time' => ['required', 'date_format:H:i'],
+            'duration' => ['required', 'integer'],
+            'capacity' => ['required', 'integer'],
         ]);
 
-        $workout = Workout::create([
-            'title' => $request->title,
-            'image' => $request->image,
-            'description' => $request->description,
-            'location' => $request->location,
-            'date' => $request->date,
-            'duration' => $request->duration,
-            'capacity' => $request->capacity,
-            'user_id' => auth()->user()->id,
+        $data['user_id'] = Auth::user()->id;
+
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $name = time() . '.' . $image->getClientOriginalExtension();
+            $destinationPath = "public/images/workouts";
+            $image->storeAs($destinationPath, $name);
+            $data['image'] = $name;
+        }
+
+        $workout = Workout::create($data);
+
+        return response()->json([
+            'status' => 200,
         ]);
-
-        return redirect()->route('home');
     }
 
-    public function show($id)
-    {
-        $workout = Workout::find($id);
-        return view('workouts.show', compact('workout'));
-    }
 
-    public function edit($id)
-    {
-        $workout = Workout::find($id);
-        return view('workouts.edit', compact('workout'));
-    }
 
-    public function update(Request $request, $id)
-    {
-        $workout = Workout::find($id);
 
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'image' => 'required|string|max:255',
-            'description' => 'required|string|max:255',
-            'location' => 'required|string|max:255',
-            'date' => 'required|date',
-            'duration' => 'required|integer',
-            'capacity' => 'required|integer',
-        ]);
-
-        $workout->update([
-            'title' => $request->title,
-            'image' => $request->image,
-            'description' => $request->description,
-            'location' => $request->location,
-            'date' => $request->date,
-            'duration' => $request->duration,
-            'capacity' => $request->capacity,
-        ]);
-
-        return redirect()->route('home');
-    }
 
 
 }

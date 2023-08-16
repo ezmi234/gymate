@@ -60,7 +60,7 @@
         </div>
         <div class="modal-body">
           <!-- Form -->
-            <form action="{{ route('workouts.store') }}" method="POST" enctype="multipart/form-data">
+            <form id="newWorkoutForm" action="#" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="mb-3">
                 <label for="title" class="form-label">Title</label>
@@ -97,7 +97,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary">Save changes</button>
+          <button type="submit" class="btn btn-primary">Save changes</button>
         </div>
       </div>
     </div>
@@ -109,9 +109,9 @@
         <div class="col-md-4">
             <div class="card">
                 @if($user->profile_image)
-                    <img src="{{ asset('storage/images/profile/' . $user->profile_image) }}" alt="Profile Image" class="img-fluid">
+                    <img src="{{ asset('storage/images/profile/' . $user->profile_image) }}" alt="Profile Image" class="img-fluid rounded">
                 @else
-                    <img src="{{ asset('images/jk-placeholder-image.jpg') }}" alt="Your Image" class="img-fluid">
+                    <img src="{{ asset('images/jk-placeholder-image.jpg') }}" alt="Your Image" class="img-fluid rounded">
                 @endif
                 <div class="card-body">
                     <div style="display:flex; flex-flow: wrap; align-items:baseline; justify-content: space-between;">
@@ -172,28 +172,16 @@
                         @endif
                     </div>
                     <div class="posts-container">
-                        <div class="card-text">
-                            <div class="media mb-3">
-                                <img src="{{ asset('images/jk-placeholder-image.jpg') }}" alt="Your Image" class="img-fluid">
-                                <div class="media-body">
-                                    <h6 class="mt-0">Great day outdoors!</h6>
-                                    <p>Just came back from an amazing hiking trip. The views were breathtaking!</p>
-                                </div>
-                            </div>
-                            <div class="media">
-                                <img src="{{ asset('images/jk-placeholder-image.jpg') }}" alt="Your Image" class="img-fluid">
-                                <div class="media-body">
-                                    <h6 class="mt-0">New coding project in the works.</h6>
-                                    <p>Excited to start working on my new web app idea using Laravel and Bootstrap.</p>
-                                </div>
-                            </div>
+                        <div id="workouts">
                         </div>
                     </div>
                 </div>
             </div>
-            <div style="width: 100px; height: 10px;">
+        </div>
+    </div>
+    <div class="row">
+        <div style="width: 100px; height: 10px;">
 
-            </div>
         </div>
     </div>
 </div>
@@ -224,11 +212,39 @@
             console.error(error);
         }
     });
-    
+
 </script>
 
 <script>
     $(function() {
+        //add new workout ajax request
+        $("#newWorkoutForm").submit(function(e) {
+            e.preventDefault();
+            var formData = new FormData(this);
+            $.ajax({
+                url: '{{ route('workouts.store') }}',
+                type: 'POST',
+                data: formData,
+                cache: false,
+                contentType: false,
+                processData: false,
+                dataType: 'json',
+                success: function(data) {
+                    console.log('success');
+                    console.log(data);
+                    if(data.status == 200) {
+                        fetchAllWorkouts();
+                        $('#newWorkoutForm').trigger('reset');
+                        $('#newWorkoutModal').modal('hide');
+                    }
+                },
+                error: function(error) {
+                    console.log('error');
+                    console.log(error);
+                },
+            });
+        });
+
         fetchAllWorkouts();
 
         function fetchAllWorkouts() {
@@ -237,9 +253,12 @@
                 type: 'GET',
                 dataType: 'json',
                 success: function(data) {
+                    console.log('success');
                     console.log(data);
+                    $('#workouts').html(data.html);
                 },
                 error: function(error) {
+                    console.log('error');
                     console.log(error);
                 }
             });
