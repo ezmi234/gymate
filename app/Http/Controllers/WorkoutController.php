@@ -6,6 +6,7 @@ use App\Models\Workout;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Carbon\Carbon;
 
 class WorkoutController extends Controller
 {
@@ -14,14 +15,15 @@ class WorkoutController extends Controller
         $this->middleware('auth');
     }
 
-    public function fetchAll()
+    public function fetchAll(Request $request)
     {
-        $workouts = Workout::where('user_id', Auth::user()->id)->get();
+        $workouts = Workout::where('user_id', $request->user_id)->get();
         $output = '';
         if ($workouts->isEmpty()) {
             return response()->json(['message' => 'No workouts found'], 404);
         }
         foreach ($workouts as $workout){
+            $date = Carbon::parse($workout->date)->format('d/m/Y');
             $path = asset('storage/images/workouts/'.$workout->image);
             $output .='<div class="card mb-4">
                 <img src="'.$path.'" alt="Workout image" class="img-fluid rounded" style="height: 40vh">
@@ -37,12 +39,12 @@ class WorkoutController extends Controller
             }
 
             $output .= '</div>
-                        <p class="card-text">Description: '.$workout->description.'</p>
-                        <p class="card-text">Location: '.$workout->location.'</p>
-                        <p class="card-text">Date: '.$workout->date.'</p>
-                        <p class="card-text">Time: '.$workout->time.'</p>
-                        <p class="card-text">Duration: '.$workout->duration.'</p>
-                        <p class="card-text">Capacity: '.$workout->capacity.'</p>
+                        <p class="card-text">'.$workout->description.'</p>
+                        <p class="card-text"><i class="bi-geo-alt-fill"></i> '.$workout->location.'</p>
+                        <p class="card-text"><i class="bi-calendar3"></i> '.$date.'</p>
+                        <p class="card-text"><i class="bi-clock"></i> '.$workout->time.'</p>
+                        <p class="card-text"><i class="bi-stopwatch"></i> '.$workout->duration.' min</p>
+                        <p class="card-text"><i class="bi-people-fill"></i> '.$workout->capacity.' people</p>
                     </div>
                 </div>';
         }

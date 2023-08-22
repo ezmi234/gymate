@@ -299,6 +299,9 @@
             $.ajax({
                 url: '{{ route('workouts.fetchAll') }}',
                 type: 'GET',
+                data: {
+                    user_id: '{{ $user->id }}'
+                },
                 dataType: 'json',
                 success: function(data) {
                     console.log('success');

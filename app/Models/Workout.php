@@ -14,7 +14,7 @@ class Workout extends Model
         'image',
         'description',
         'location',
-        'date',
+        'date' => 'date',
         'time',
         'duration',
         'capacity',
