@@ -18,7 +18,7 @@
         style="background-color: #efefef;">
         <div>
             <p class="small text-muted mb-1">Workouts</p>
-            <p class="mb-0">0</p>
+            <p class="mb-0">{{ $user->workouts->count() }}</p>
         </div>
         <div class="px-3">
             <p class="small text-muted mb-1">Follows</p>

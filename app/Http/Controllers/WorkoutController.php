@@ -39,12 +39,14 @@ class WorkoutController extends Controller
             }
 
             $output .= '</div>
-                        <p class="card-text">'.$workout->description.'</p>
+                        <div style="display:flex; flex-flow: wrap;">
                         <p class="card-text"><i class="bi-geo-alt-fill"></i> '.$workout->location.'</p>
                         <p class="card-text"><i class="bi-calendar3"></i> '.$date.'</p>
                         <p class="card-text"><i class="bi-clock"></i> '.$workout->time.'</p>
                         <p class="card-text"><i class="bi-stopwatch"></i> '.$workout->duration.' min</p>
                         <p class="card-text"><i class="bi-people-fill"></i> '.$workout->capacity.' people</p>
+                        </div>
+                        <p class="card-text">'.$workout->description.'</p>
                     </div>
                 </div>';
         }
