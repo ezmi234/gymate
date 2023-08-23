@@ -12,8 +12,6 @@ class Comment extends Model
     protected $fillable =
     [
         'body',
-        'workout_id',
-        'user_id',
     ];
 
     public function workout()

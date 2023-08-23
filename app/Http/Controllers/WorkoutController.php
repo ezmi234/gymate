@@ -47,8 +47,25 @@ class WorkoutController extends Controller
                         <p class="card-text"><i class="bi-people-fill"></i> '.$workout->capacity.' people</p>
                         </div>
                         <p class="card-text">'.$workout->description.'</p>
-                    </div>
+                        <h5 class="card-title">Comments</h5>
+            <div class="comments">';
+
+            foreach ($workout->comments as $comment) {
+                $output .= '<div class="comment">
+                    <p>'.$comment->content.'</p>
                 </div>';
+            }
+
+            $output .= '</div>
+
+                    <!-- Add a form to submit comments -->
+                    <form class="comment-form">
+                        @csrf
+                        <textarea name="comment_content" class="form-control" rows="3" placeholder="Write a comment"></textarea>
+                        <button type="submit" class="btn btn-primary mt-2">Submit Comment</button>
+                    </form>
+                </div>
+            </div>';
         }
         return response()->json([
             'status' => 200,
