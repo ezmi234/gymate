@@ -34,21 +34,20 @@
                         $('#profileModalTrigger').trigger('click');
                     });
                 </script>
-            @else
-                <div class="card">
-                    <div class="card-body">
-                        <div class="card-title" style="display: flex; align-items: baseline;
-                        justify-content: space-between;
-                        margin-inline: 4px;">
-                            <h5>Workouts</h5>
-                        </div>
-                        <div class="posts-container">
-                            <div id="workouts">
-                            </div>
+            @endif
+            <div class="card">
+                <div class="card-body">
+                    <div class="card-title" style="display: flex; align-items: baseline;
+                    justify-content: space-between;
+                    margin-inline: 4px;">
+                        <h5>Workouts</h5>
+                    </div>
+                    <div class="posts-container">
+                        <div id="workouts">
                         </div>
                     </div>
                 </div>
-            @endif
+            </div>
         </div>
     </div>
 </div>

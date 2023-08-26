@@ -39,31 +39,18 @@ class WorkoutController extends Controller
             }
 
             $output .= '</div>
-                        <div style="display:flex; flex-flow: wrap;">
-                        <p class="card-text"><i class="bi-geo-alt-fill"></i> '.$workout->location.'</p>
-                        <p class="card-text"><i class="bi-calendar3"></i> '.$date.'</p>
-                        <p class="card-text"><i class="bi-clock"></i> '.$workout->time.'</p>
-                        <p class="card-text"><i class="bi-stopwatch"></i> '.$workout->duration.' min</p>
-                        <p class="card-text"><i class="bi-people-fill"></i> '.$workout->capacity.' people</p>
-                        </div>
-                        <p class="card-text">'.$workout->description.'</p>
-                        <h5 class="card-title">Comments</h5>
-            <div class="comments">';
+                    <div style="display:flex; flex-flow: wrap;">
+                    <p class="card-text" style="margin-right: 10px;"><i class="bi-geo-alt-fill"></i> '.$workout->location.'</p>
+                    <p class="card-text" style="margin-right: 10px;"><i class="bi-calendar3"></i> '.$date.'</p>
+                    <p class="card-text" style="margin-right: 10px;"><i class="bi-clock"></i> '.$workout->time.'</p>
+                    <p class="card-text" style="margin-right: 10px;"><i class="bi-stopwatch"></i> '.$workout->duration.' min</p>
+                    <p class="card-text" style="margin-right: 10px;"><i class="bi-people-fill"></i> '.$workout->capacity.' people</p>
+                    </div>
+                    <p class="card-text">'.$workout->description.'</p>';
 
-            foreach ($workout->comments as $comment) {
-                $output .= '<div class="comment">
-                    <p>'.$comment->content.'</p>
-                </div>';
-            }
+            $output .= view('comments.index' , ['workout' => $workout])->render();
 
-            $output .= '</div>
-
-                    <!-- Add a form to submit comments -->
-                    <form class="comment-form">
-                        @csrf
-                        <textarea name="comment_content" class="form-control" rows="3" placeholder="Write a comment"></textarea>
-                        <button type="submit" class="btn btn-primary mt-2">Submit Comment</button>
-                    </form>
+            $output .='
                 </div>
             </div>';
         }

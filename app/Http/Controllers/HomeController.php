@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Workout;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -99,9 +100,13 @@ class HomeController extends Controller
                         <p class="card-text" style="margin-right: 10px;"><i class="bi-stopwatch"></i> '.$workout->duration.' min</p>
                         <p class="card-text" style="margin-right: 10px;"><i class="bi-people-fill"></i> '.$workout->capacity.' people</p>
                         </div>
-                        <p class="card-text">'.$workout->description.'</p>
-                    </div>
-                </div>';
+                        <p class="card-text">'.$workout->description.'</p>';
+
+            $output .= view('comments.index' , ['workout' => Workout::find($workout->id)])->render();
+
+            $output .='
+                </div>
+            </div>';
         }
         return response()->json([
             'status' => 200,
