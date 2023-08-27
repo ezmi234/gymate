@@ -44,3 +44,4 @@ Route::get('/workouts/fetchAll', [App\Http\Controllers\WorkoutController::class,
 Route::delete('/workouts/delete', [App\Http\Controllers\WorkoutController::class, 'delete'])->name('workouts.delete');
 
 Route::post('/comments/store/{workout_id}', [App\Http\Controllers\CommentController::class, 'store'])->name('comments.store');
+Route::delete('/comments/delete/{id}', [App\Http\Controllers\CommentController::class, 'delete'])->name('comments.delete');
