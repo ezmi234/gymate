@@ -122,45 +122,4 @@ class HomeController extends Controller
         ]);
     }
 
-    public function fetchAllNotifications()
-    {
-        $user = User::find(auth()->user()->id);
-        $notifications = $user->notifications()->orderBy('created_at', 'desc')->get();
-        $output = '';
-        if ($notifications->isEmpty()) {
-            return response()->json(['message' => 'No notifications found'], 404);
-        }
-        else{
-            $output .= '<ul class="list-group">';
-            foreach ($notifications as $notification){
-                $output .= '<li class="list-group-item d-flex justify-content-between align-items-start">
-                <div class="ms-2 me-auto">
-                    <div class="fw-bold">'.User::find($notification->sender_id)->name;
-
-                if($notification->type == 'follow'){
-                    $output .= ' started following you';
-                }
-                else if($notification->type == 'like'){
-                    $output .= ' liked your workout';
-                }
-                else if($notification->type == 'join'){
-                    $output .= ' joined your workout';
-                }
-                else if($notification->type == 'leave'){
-                    $output .= ' left your workout';
-                }
-
-                $output .= '</div>
-                    <small>'.$notification->created_at->diffForHumans().'</small>
-                </div>
-                <span class="badge bg-primary rounded-pill">14</span>
-                </li>';
-            }
-            $output .= '</ul>';
-        }
-        return response()->json([
-            'status' => 200,
-            'html' => $output,
-        ]);
-    }
 }

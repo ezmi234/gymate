@@ -68,7 +68,7 @@
                                     <a class="nav-link btn position-relative" href="" data-bs-toggle="modal" data-bs-target="#notificationsModal">
                                         Notifications
                                         @if( auth()->user()->unreadNotifications->count() > 0 )
-                                            <span class="position-absolute start-100 translate-middle badge rounded-pill bg-danger" style="top: auto">
+                                            <span id="notificationCounter" class="position-absolute start-100 translate-middle badge rounded-pill bg-danger" style="top: auto">
                                                 {{ auth()->user()->unreadNotifications->count() }}
                                             </span>
                                         @endif
@@ -153,7 +153,7 @@
         const searchTerm = document.getElementById('searchInput').value;
         const searchResults = document.getElementById('searchResults');
 
-        if (searchTerm.trim() === '') {
+        if (searchTerm.trim() === '' || searchTerm.length < 3) {
             // If the search term is empty, hide the search results container
             searchResults.style.display = 'none';
         } else {
@@ -187,22 +187,53 @@
 </script>
 
 <script>
-    // AJAX Notifications functionality
-    $('#notificationsModal').on('show.bs.modal', function (event) {
-        const button = $(event.relatedTarget);
-        const modal = $(this);
-        const modalBody = modal.find('.modal-body');
+    $(function() {
 
-        // Make the AJAX request
-        fetch('{{ route('fetchAllNotifications') }}')
-            .then(response => response.json())
-            .then(data => {
-                console.log(data);
-                modalBody.html(data.html);
-            })
-            .catch(error => {
-                console.error('Error:', error);
+        // delete notification ajax request
+        $(document).on('click', '.delete-notification', function(e) {
+            e.preventDefault();
+            const notificationId = $(this).attr('id');
+            $.ajax({
+                url: '{{ route('deleteNotification') }}',
+                method: 'delete',
+                data: {
+                    notificationId: notificationId,
+                    _token: '{{ csrf_token() }}'
+                },
+                success: function(data) {
+                    console.log('success');
+                    console.log(data);
+                    if (data.status == 200) {
+                        fetchAllNotifications();
+                        $('#notificationCounter').html(data.unreadNotificationsCount);
+                    }
+                },
+                error: function(error) {
+                    console.log('error');
+                    console.log(error);
+                }
             });
+        });
+
+        fetchAllNotifications();
+
+        function fetchAllNotifications() {
+            $.ajax({
+                url: '{{ route('fetchAllNotifications') }}',
+                type: 'GET',
+                dataType: 'json',
+                success: function(data) {
+                    console.log('success');
+                    console.log(data);
+                    $('#notificationsModalBody').html(data.html);
+                },
+                error: function(error) {
+                    console.log('error');
+                    console.log(error);
+                    $('#notificationsModalBody').html('<p class="text-center">No notifications found</p>');
+                }
+            });
+        }
     });
 </script>
 

@@ -28,7 +28,11 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 Route::get('/search', [App\Http\Controllers\HomeController::class, 'search'])->name('search');
 Route::get('/searchView', [App\Http\Controllers\HomeController::class, 'searchView'])->name('searchView');
 Route::get('/fetchAllWorkouts', [App\Http\Controllers\HomeController::class, 'fetchAllWorkouts'])->name('fetchAllWorkouts');
-Route::get('/fetchAllNotifications', [App\Http\Controllers\HomeController::class, 'fetchAllNotifications'])->name('fetchAllNotifications');
+
+Route::get('/fetchAllNotifications', [App\Http\Controllers\NotificationController::class, 'fetchAllNotifications'])->name('fetchAllNotifications');
+Route::get('/markAsRead', [App\Http\Controllers\NotificationController::class, 'markAsRead'])->name('markAsRead');
+//Route::get('/markAllAsRead', [App\Http\Controllers\NotificationController::class, 'markAllAsRead'])->name('markAllAsRead');
+Route::delete('/deleteNotification', [App\Http\Controllers\NotificationController::class, 'delete'])->name('deleteNotification');
 
 Route::get('/users/show/{id}', [App\Http\Controllers\UserController::class, 'show'])->name('users.show');
 Route::get('/users/edit/{id}', [App\Http\Controllers\UserController::class, 'edit'])->name('users.edit');
