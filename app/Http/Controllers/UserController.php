@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Notification;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -79,6 +80,11 @@ class UserController extends Controller
             return response()->json(['message' => 'Successfully unfollowed.']);
         }
         User::find(auth()->user()->id)->follow($user);
+        Notification::create([
+            'type' => 'follow',
+            'sender_id' => auth()->user()->id,
+            'receiver_id' => $user->id,
+        ]);
         return response()->json(['message' => 'Successfully followed.']);
     }
 

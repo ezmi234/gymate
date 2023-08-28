@@ -137,6 +137,12 @@ class WorkoutController extends Controller
 
     public function join(Request $request) {
         $workout = Workout::find($request->id);
+        if ($workout->capacity == $workout->joins()->count()) {
+            return response()->json([
+                'status' => 400,
+                'message' => 'Workout is full',
+            ]);
+        }
         $workout->joins()->create([
             'workout_id' => $request->id,
             'user_id' => Auth::user()->id,

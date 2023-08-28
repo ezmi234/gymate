@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->timestamps();
             $table->string('type');
+            $table->boolean('read')->default(false);
 
             $table->unsignedBigInteger('sender_id');
             $table->unsignedBigInteger('receiver_id');

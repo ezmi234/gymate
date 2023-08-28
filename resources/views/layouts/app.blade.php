@@ -19,6 +19,27 @@
 </head>
 <body>
     <div id="app">
+
+        <div class="modal fade" id="notificationsModal" tabindex="-1" role="dialog" aria-labelledby="notificationsModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-scrollable modal-fullscreen-sm-down" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="notificationsModalLabel">Notifications</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+
+                    <div id="notificationsModalBody" class="modal-body">
+                        <!-- AJAX results will be displayed here -->
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm fixed-top">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
@@ -44,10 +65,13 @@
 
                             <li class="nav-item" style="margin-right: 20px">
                                 <div style="display: flex">
-                                    <a class="nav-link btn position-relative" href="{{-- route('notifications') --}}">Notifications
-                                        <span class="position-absolute start-100 translate-middle badge rounded-pill bg-danger" style="top: auto">
-                                            99+
-                                        </span>
+                                    <a class="nav-link btn position-relative" href="" data-bs-toggle="modal" data-bs-target="#notificationsModal">
+                                        Notifications
+                                        @if( auth()->user()->unreadNotifications->count() > 0 )
+                                            <span class="position-absolute start-100 translate-middle badge rounded-pill bg-danger" style="top: auto">
+                                                {{ auth()->user()->unreadNotifications->count() }}
+                                            </span>
+                                        @endif
                                     </a>
                                 </div>
                             </li>
@@ -159,6 +183,26 @@
     document.getElementById('searchButton').addEventListener('click', function () {
     const searchTerm = document.getElementById('searchInput').value;
     window.location.href = '{{ route('searchView') }}?term=' + searchTerm;
+    });
+</script>
+
+<script>
+    // AJAX Notifications functionality
+    $('#notificationsModal').on('show.bs.modal', function (event) {
+        const button = $(event.relatedTarget);
+        const modal = $(this);
+        const modalBody = modal.find('.modal-body');
+
+        // Make the AJAX request
+        fetch('{{ route('fetchAllNotifications') }}')
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                modalBody.html(data.html);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
     });
 </script>
 

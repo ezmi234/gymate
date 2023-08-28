@@ -97,6 +97,16 @@ class User extends Authenticatable
         return $this->joins()->where('workout_id', $workout->id)->exists();
     }
 
+    public function notifications()
+    {
+        return $this->hasMany(Notification::class, 'receiver_id');
+    }
+
+    public function unreadNotifications()
+    {
+        return $this->notifications()->where('read', false);
+    }
+
 
 
 }
