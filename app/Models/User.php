@@ -77,5 +77,26 @@ class User extends Authenticatable
         return $this->hasMany(Workout::class);
     }
 
+    public function likes()
+    {
+        return $this->hasMany(Like::class);
+    }
+
+    public function hasLiked(Workout $workout)
+    {
+        return $this->likes()->where('workout_id', $workout->id)->exists();
+    }
+
+    public function joins()
+    {
+        return $this->hasMany(Join::class);
+    }
+
+    public function hasJoined(Workout $workout)
+    {
+        return $this->joins()->where('workout_id', $workout->id)->exists();
+    }
+
+
 
 }

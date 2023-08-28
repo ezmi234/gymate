@@ -42,6 +42,10 @@ Route::get('/users/followModal/{id}', [App\Http\Controllers\UserController::clas
 Route::post('/workouts/store', [App\Http\Controllers\WorkoutController::class, 'store'])->name('workouts.store');
 Route::get('/workouts/fetchAll', [App\Http\Controllers\WorkoutController::class, 'fetchAll'])->name('workouts.fetchAll');
 Route::delete('/workouts/delete', [App\Http\Controllers\WorkoutController::class, 'delete'])->name('workouts.delete');
+Route::post('/workouts/like/{id}', [App\Http\Controllers\WorkoutController::class, 'like'])->name('workouts.like');
+Route::post('/workouts/dislike/{id}', [App\Http\Controllers\WorkoutController::class, 'dislike'])->name('workouts.dislike');
+Route::post('/workouts/join/{id}', [App\Http\Controllers\WorkoutController::class, 'join'])->name('workouts.join');
+Route::post('/workouts/leave/{id}', [App\Http\Controllers\WorkoutController::class, 'leave'])->name('workouts.leave');
 
 Route::post('/comments/store/{workout_id}', [App\Http\Controllers\CommentController::class, 'store'])->name('comments.store');
 Route::delete('/comments/delete/{id}', [App\Http\Controllers\CommentController::class, 'delete'])->name('comments.delete');

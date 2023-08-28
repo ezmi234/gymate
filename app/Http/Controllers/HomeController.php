@@ -79,7 +79,8 @@ class HomeController extends Controller
         foreach ($workouts as $workout){
             $date = Carbon::parse($workout->date)->format('d/m/Y');
             $path = asset('storage/images/workouts/'.$workout->image);
-            $output .='<div class="card mb-4">
+            $output .='<h4>'.Workout::find($workout->id)->user->name.'
+            <div class="card mb-4">
                 <img src="'.$path.'" alt="Workout image" class="img-fluid rounded" style="height: 40vh">
                 <div class="card-body">
                     <div style="display:flex; flex-flow: wrap; align-items:baseline; justify-content: space-between;">
@@ -101,6 +102,13 @@ class HomeController extends Controller
                         <p class="card-text" style="margin-right: 10px;"><i class="bi-people-fill"></i> '.$workout->capacity.' people</p>
                         </div>
                         <p class="card-text">'.$workout->description.'</p>';
+
+            $output .='
+                </div>
+            </div>
+            <div class="card mb-4">
+            <div class="card-body ">'
+            ;
 
             $output .= view('comments.index' , ['workout' => Workout::find($workout->id)])->render();
 

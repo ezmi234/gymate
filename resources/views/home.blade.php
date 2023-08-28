@@ -40,7 +40,7 @@
                     <div class="card-title" style="display: flex; align-items: baseline;
                     justify-content: space-between;
                     margin-inline: 4px;">
-                        <h5>Workouts</h5>
+                        <h3>Workouts</h3>
                     </div>
                     <div class="posts-container">
                         <div id="workouts">

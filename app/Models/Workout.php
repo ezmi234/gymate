@@ -30,4 +30,14 @@ class Workout extends Model
     {
         return $this->hasMany(Comment::class)->orderBy('created_at', 'DESC');
     }
+
+    public function likes()
+    {
+        return $this->hasMany(Like::class);
+    }
+
+    public function joins()
+    {
+        return $this->hasMany(Join::class);
+    }
 }
