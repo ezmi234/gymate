@@ -13,9 +13,9 @@
                         <div class="row">
                             <div class="col-md-4">
                                 @if ($user->profile_image)
-                                    <img src="{{ asset('storage/images/profile/' . $user->profile_image) }}" alt="Profile Image" class="img-fluid mb-3">
+                                    <img src="{{ asset('storage/images/profile/' . $user->profile_image) }}" alt="Profile Image" class="img-fluid mb-3" style="border-radius: 10px;">
                                 @else
-                                    <img src="{{ asset('images/default-profile-image.png') }}" alt="Default Profile Image" class="img-fluid mb-3">
+                                <img src="{{ asset('images/profile-placeholder.png') }}" alt="Generic placeholder profile" class="img-fluid mb-3" style="border-radius: 10px;">
                                 @endif
                             </div>
                             <div class="col-md-8">
@@ -41,22 +41,22 @@
                         <div class="card-body">
                             <form method="POST" action="{{ route('users.complete_profile') }}" enctype="multipart/form-data">
                                 @csrf
-        
+
                                 <div class="form-group">
                                     <label for="profile_image">Profile Image:</label>
                                     <input type="file" id="profile_image" name="profile_image" class="form-control">
                                 </div>
-        
+
                                 <div class="form-group">
                                     <label for="location">Location:</label>
                                     <input type="text" id="location" name="location" class="form-control">
                                 </div>
-        
+
                                 <div class="form-group">
                                     <label for="about_me">About Me:</label>
                                     <textarea id="about_me" name="about_me" class="form-control"></textarea>
                                 </div>
-        
+
                                 <button type="submit" class="btn btn-primary mt-2">Save</button>
                             </form>
                             @if(session('success'))

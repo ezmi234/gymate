@@ -91,7 +91,6 @@ class HomeController extends Controller
 
             if(Auth::user()->id == $workout->user_id){
                 $output .= '<div>
-                <a href="#" id="' . $workout->id . '" class="text-success mx-1 editIcon" data-bs-toggle="modal" data-bs-target="#editWorkoutModal"><i class="bi-pencil-square h4"></i></a>
                 <a href="#" id="' . $workout->id . '" class="text-danger mx-1 deleteIcon"><i class="bi-trash h4"></i></a>
                 </div>';
             }

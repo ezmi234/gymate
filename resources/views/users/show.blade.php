@@ -78,47 +78,51 @@
           <h1 class="modal-title fs-5" id="newWorkoutModalLabel">New Workout</h1>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <div class="modal-body">
-          <!-- Form -->
-            <form id="newWorkoutForm" action="#" method="POST" enctype="multipart/form-data">
-                @csrf
+        <!-- Form -->
+        <form id="newWorkoutForm" action="#" method="POST" enctype="multipart/form-data">
+            @csrf
+            <div class="modal-body">
                 <div class="mb-3">
-                <label for="title" class="form-label">Title</label>
-                <input type="text" class="form-control" id="title" name="title" placeholder="Enter title">
+                    <label for="title" class="form-label">Title</label>
+                    <input type="text" class="form-control" id="title" name="title" placeholder="Enter title">
                 </div>
                 <div class="mb-3">
-                <label for="type" class="form-label">Image</label>
-                <input type="file" class="form-control" id="image" name="image">
+                    <label for="type" class="form-label">Image</label>
+                    <input type="file" class="form-control" id="image" name="image">
                 </div>
                 <div class="mb-3">
-                <label for="description" class="form-label">Description</label>
-                <textarea class="form-control" id="description" name="description" rows="3" placeholder="Enter description"></textarea>
+                    <label for="description" class="form-label">Description</label>
+                    <textarea class="form-control" id="description" name="description" rows="3" placeholder="Enter description"></textarea>
                 </div>
                 <div class="mb-3">
-                <label for="location" class="form-label">Location</label>
-                <input type="text" class="form-control" id="location" name="location" placeholder="Enter location">
+                    <label for="location" class="form-label">Location</label>
+                    <input type="text" class="form-control" id="location" name="location" placeholder="Enter location">
                 </div>
                 <div class="mb-3">
-                <label for="date" class="form-label">Date</label>
-                <input type="date" class="form-control" id="date" name="date">
+                    <label for="date" class="form-label">Date</label>
+                    <input type="date" class="form-control" id="date" name="date">
                 </div>
                 <div class="mb-3">
-                <label for="time" class="form-label">Time</label>
-                <input type="time" class="form-control" id="time" name="time">
+                    <label for="time" class="form-label">Time</label>
+                    <input type="time" class="form-control" id="time" name="time">
                 </div>
                 <div class="mb-3">
-                <label for="duration" class="form-label">Duration</label>
-                <input type="number" class="form-control" id="duration" name="duration" placeholder="Enter duration">
+                    <label for="duration" class="form-label">Duration</label>
+                    <input type="number" class="form-control" id="duration" name="duration" placeholder="Enter duration">
                 </div>
                 <div class="mb-3">
-                <label for="distance" class="form-label">Capacity</label>
-                <input type="number" class="form-control" id="capacity" name="capacity" placeholder="Enter capacity">
+                    <label for="distance" class="form-label">Capacity</label>
+                    <input type="number" class="form-control" id="capacity" name="capacity" placeholder="Enter capacity">
                 </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="submit" class="btn btn-primary">Save changes</button>
-        </div>
+                <div class="mb-3">
+                    <label for="errors" class="form-errors text-danger"></label>
+                </div>
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary">Save changes</button>
+            </div>
+        </form>
       </div>
     </div>
   </div>
@@ -144,11 +148,10 @@
                                 {{ auth()->user()->isFollowing($user) ? 'Unfollow' : 'Follow' }}
                             </button>
                         @else
-                            <a href="#" class="btn btn-success btn-block">Edit Profile</a>
+                            <a href="{{ route('users.edit', $user->id) }}" class="btn btn-success btn-block">Edit Profile</a>
                         @endif
                     </div>
-                    <p class="card-text">Web Developer</p>
-                    <p class="card-text">Location: {{ $user->location }}</p>
+                    <p class="card-text">Location: {{ $user->location ?: 'N/A' }}</p>
                     <p class="card-text">Joined: {{ $user->created_at->diffForHumans() }}</p>
                 </div>
             </div>
@@ -175,7 +178,7 @@
             <div class="card mt-3">
                 <div class="card-body">
                     <h5 class="card-title">About Me</h5>
-                    <p class="card-text">{{ $user->about_me }}</p>
+                    <p class="card-text">{{ $user->about_me ?: 'N/A' }}</p>
                 </div>
             </div>
         </div>
@@ -258,6 +261,9 @@
                         fetchAllWorkouts();
                         $('#newWorkoutForm').trigger('reset');
                         $('#newWorkoutModal').modal('hide');
+                    } else if(data.status == 400) {
+                        console.log(data.errors);
+                        $('.form-errors').html(data.errors);
                     }
                 },
                 error: function(error) {

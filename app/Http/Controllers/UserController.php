@@ -36,15 +36,33 @@ class UserController extends Controller
 
     public function edit()
     {
-        return view('users.edit');
+        return view('users.edit', ['user' => Auth::user()]);
     }
 
-    public function update(Request $request)
+    public function update(Request $request, $id)
     {
-        $user = User::find(User::find(auth()->user()->id)->id);
-        $user->name = $request->input('name');
-        $user->save();
-        return redirect()->route('users.profile');
+        $user = User::find($id);
+
+        $data = $request->validate([
+            'profile_image' => ['nullable', 'image', 'mimes:png,jpg,jpeg,svg',  'max:2048'],
+            'location' => ['required', 'string', 'max:255'],
+            'about_me' => ['required', 'string', 'max:1000'],
+        ]);
+
+        if ($request->hasFile('profile_image')) {
+            $image = $request->file('profile_image');
+            $name = time() . '.' . $image->getClientOriginalExtension();
+            $destinationPath = "public/images/profile";
+            $image->storeAs($destinationPath, $name);
+            $data['profile_image'] = $name;
+            if ($user->profile_image != null) {
+                Storage::delete('public/images/profile/' . $user->profile_image);
+            }
+        }
+
+        $user->update($data);
+
+        return view('users.profile', compact(['user']))->with('success', 'Profile updated successfully!');
     }
 
     public function complete_profile(Request $request)
@@ -52,9 +70,9 @@ class UserController extends Controller
         $user = User::find(User::find(auth()->user()->id)->id);
 
         $data = $request->validate([
-            'profile_image' => ['nullable', 'image', 'mimes:png,jpg,jpeg,svg',  'max:2048'],
-            'location' => ['nullable', 'string', 'max:255'],
-            'about_me' => ['nullable', 'string', 'max:1000'],
+            'profile_image' => ['required', 'image', 'mimes:png,jpg,jpeg,svg',  'max:2048'],
+            'location' => ['required', 'string', 'max:255'],
+            'about_me' => ['required', 'string', 'max:1000'],
         ]);
 
         $data['profile_completed'] = true;

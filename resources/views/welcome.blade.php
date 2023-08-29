@@ -11,7 +11,7 @@
         </div>
         <div class="col-md-6 mt-md-0 mt-4">
             <!-- Add an image related to Gymate here -->
-            <img src="{{ asset('images/jk-placeholder-image.jpg') }}" alt="Your Image" class="img-fluid">
+            <img src="{{ asset('images/landing-page.jpeg') }}" class="img-fluid rounded" alt="Gymate">
         </div>
     </div>
 </div>

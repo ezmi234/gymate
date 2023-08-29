@@ -127,10 +127,6 @@
                                         Profile
                                     </a>
 
-                                    <a class="dropdown-item" href="{{-- route('settings') --}}">
-                                        Settings
-                                    </a>
-
                                     <hr class="dropdown-divider">
 
                                     <form method="POST" action="{{ route('logout') }}">
