@@ -1,66 +1,96 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Web Developement Project - University of Bologna
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+# **GYMATE**
 
-## About Laravel
+## Introduction
+This project simulates a social media platform, where the purpose is to create connection between gym buddies where you can easily find you GymBro and follow his workouts.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Instructions
+Clone this repo and open an unix bash inside the `gymate` in  folder. 
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+Run the following commands:
+```bash
+docker run --rm \
+    -u "$(id -u):$(id -g)" \
+    -v $(pwd):/opt \
+    -w /opt \
+    laravelsail/php81-composer:latest \
+    composer install --ignore-platform-reqs
+```
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+```bash
+sudo chown -R $USER: .
+```
 
-## Learning Laravel
+```bash
+cp .env.example .env
+```
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+Open the `.env` file and change the following lines:
+```bash
+DB_CONNECTION=mysql
+DB_HOST=mysql
+DB_PORT=3306
+DB_DATABASE=gymate
+DB_USERNAME=sail
+DB_PASSWORD=password
+```
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+The first time you run the project, you need to run the following script:
+```bash 
+./start.sh
+```
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+After that, you can run the project with the following script:
+```bash
+./start2.sh
+```
 
-## Laravel Sponsors
+## Basic Functionalities
+### Login and Registration
+It is possibile to register to *Gymate* with an **unique email** per user. The names are also required, as well as a password that will be safely stored in the mysql database.
+Once a User is registered, it's possible to login with the provided email and the choosen password. Once the login is done
+the homepage is shown.
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+### Profile
+There are *two* types of profile:
+- **Personal Profile**: your own profile where you can view post(workout) and interact with them, delete posts and edit your profile.
+- **User Profile**: other users profiles, where you can view their post and interact with them. You can also follow/unfollow them.
 
-### Premium Partners
+#### Edit Profile
+Once you have registered your account you will be redirected to the profile editing page where you can change your profile picture and bio. It can be accessed from the personal profile page too. Here you can edit your bio, profile picture and location.
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
+#### Search Profiles
+In the top searchbar, it's possible to search for a user by it's name. A list of the first 5 result is shown, and by clicking to one of the result, the page is redirected to the searched user profile's page. If you want to see all the results, you can click on the `Search` button.
 
-## Contributing
+### Timelines
+There are *two* homes:
+- **Home** where it is possible to see al posts of followed users only
+- **Explore** where are shown future posts from people that the user might be interested in
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+To select one of the two, the navbar makes it easy to access them.
 
-## Code of Conduct
+### Post Creation Editor
+In your profile page you can also add a post click on the button `Add Workout`. Here you can add a title, a description, a date and a place for the event. You can also add a picture to the post. Once you have created a post you delete it.
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### Post
+When you enter a post you will be able to view or post comments regarding the post / workout. Inside a post there are informations regarding the number of likes and the number of participants the place and date of the event and a link to the profile of the creator. Here you can decide to participate or leave an workout.
 
-## Security Vulnerabilities
+### Notifications
+Notifications are in real time, meaning that a long polling procedure retrieves new notifications every (worst case) 10 seconds.
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+A notification is sent to you if:
+- Someone started following you.
+- Someone liked your post.
+- Someone commented your post.
+- Someone is participating to one of your workouts.
+- Someone left one of your workouts.
 
-## License
+---
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## Pros
+- Mobile First Approach
+- Responsive Design
+- Use of **AJAX**
+- Passwords encyption
+- Real time notification updates
