@@ -70,6 +70,7 @@ class NotificationController extends Controller
         return response()->json([
             'status' => 200,
             'html' => $output,
+            'unreadNotificationsCount' => User::find(auth()->user()->id)->unreadNotifications()->count(),
         ]);
     }
 

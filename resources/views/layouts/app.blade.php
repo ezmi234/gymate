@@ -107,11 +107,12 @@
                                 <div style="display: flex">
                                     <a class="nav-link btn position-relative" href="" data-bs-toggle="modal" data-bs-target="#notificationsModal">
                                         Notifications
-                                        @if( auth()->user()->unreadNotifications->count() > 0 )
-                                            <span id="notificationCounter" class="position-absolute start-100 translate-middle badge rounded-pill bg-danger" style="top: auto">
-                                                {{ auth()->user()->unreadNotifications->count() }}
-                                            </span>
-                                        @endif
+
+                                        <span id="notificationCounter" class="position-absolute start-100 translate-middle badge rounded-pill bg-danger d-none"
+                                        style="top: auto">
+                                            {{ auth()->user()->unreadNotifications->count() }}
+                                        </span>
+
                                     </a>
                                 </div>
                             </li>
@@ -298,6 +299,9 @@
 
         fetchAllNotifications();
 
+        // Call fetchAllNotifications every 5 seconds
+        setInterval(fetchAllNotifications, 5000); // 5000 milliseconds = 5 seconds
+
         function fetchAllNotifications() {
             $.ajax({
                 url: '{{ route('fetchAllNotifications') }}',
@@ -307,11 +311,18 @@
                     console.log('success');
                     console.log(data);
                     $('#notificationsModalBody').html(data.html);
+                    $('#notificationCounter').html(data.unreadNotificationsCount);
+                    if (data.unreadNotificationsCount > 0) {
+                        $('#notificationCounter').removeClass('d-none');
+                    }else{
+                        $('#notificationCounter').addClass('d-none');
+                    }
                 },
                 error: function(error) {
                     console.log('error');
                     console.log(error);
                     $('#notificationsModalBody').html('<p class="text-center">No notifications found</p>');
+                    $('#notificationCounter').addClass('d-none');
                 }
             });
         }
