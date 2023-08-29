@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Step 1: Start the Docker environment
+# Step  1: Start the Docker environment
 vendor/bin/sail up -d
 
 # Step 2: Generate the application key
