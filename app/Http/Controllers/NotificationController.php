@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Comment;
 use App\Models\Notification;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -11,7 +12,8 @@ class NotificationController extends Controller
     public function fetchAllNotifications()
     {
         $user = User::find(auth()->user()->id);
-        $notifications = $user->notifications()->orderBy('created_at', 'desc')->get();
+        $notifications = $user->notifications()->where('read', false)->orderBy('created_at', 'desc')->get();
+        $notifications = $notifications->merge($user->notifications()->where('read', true)->orderBy('created_at', 'desc')->get());
         $output = '';
         if ($notifications->isEmpty()) {
             return response()->json(['message' => 'No notifications found'], 404);
@@ -24,10 +26,17 @@ class NotificationController extends Controller
                         </div>';
             foreach ($notifications as $notification){
                 $output .= '<li class="list-group-item d-flex justify-content-between align-items-start">
-                <div class="user-profile-image">
-                    <img class="img-fluid" style="width: 40px; height: 40px; border-radius: 10px;"
-                    src="' . asset('storage/images/profile').'/' . User::find($notification->sender_id)->profile_image . '" alt="User Profile Image">
-                </div>
+                <div class="user-profile-image">';
+                if (User::find($notification->sender_id)->profile_image){
+                    $output .= '<img class="img-fluid" style="max-width: 40px; max-height: 40px; border-radius: 10px;"
+                    src="' . asset('storage/images/profile').'/' . User::find($notification->sender_id)->profile_image . '" alt="User Profile Image">';
+                }
+                else{
+                    $output .= '<img src="'.asset('images/profile-placeholder.png').'"
+                     alt="User Profile Image" class="img-fluid" style="max-width: 40px; max-height: 40px; border-radius: 10px;">';
+                }
+
+                $output .= '</div>
                 <div class="ms-2 me-auto">
                     <div class="fw"><a style="text-decoration: none;" class="text-primary" href="'.route('users.show', User::find($notification->sender_id)).'">'.User::find($notification->sender_id)->name.'</a>';
 
@@ -42,6 +51,9 @@ class NotificationController extends Controller
                 }
                 else if($notification->type == 'leave'){
                     $output .= ' left your workout: <span style="font-weight: 500;">'.Notification::find($notification->id)->workout->title.'</span>';
+                }
+                else if($notification->type == 'comment'){
+                    $output .= ' commented "'.Notification::find($notification->id)->comment->body.'" on your workout: <span style="font-weight: 500;">'.Notification::find($notification->id)->workout->title.'</span>';
                 }
 
                 $output .= '</div>

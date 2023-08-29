@@ -1,27 +1,24 @@
-<style>
-    /* Adjust the font size for comments within col-md-8 */
-.col-md-8 .comment p {
-    font-size: 14px; /* Adjust the font size as needed */
-}
-
-/* If you need to adjust other properties like margin or padding */
-.col-md-8 .comment {
-    margin-bottom: 0px; /* Adjust the margin as needed */
-}
-</style>
-
 
 <div>
     <h5 class="card-title">Comments:</h5>
-    <div class="comments" style="margin-bottom: 15px">
+    <ul class="list-group list-group-flush">
         @foreach ($workout->comments->take(3) as $comment)
-            <div class="comment d-flex align-items-baseline justify-content-between" style="font-size: 14px">
-                <p>
-                    <a href="{{ route('users.show', $comment->user->id) }}" style="text-decoration: none; color: inherit; font-weight: 500">
-                        {{ $comment->user->name }}:
-                    </a>
-                    {{ $comment->body }}
-                </p>
+            <li class="list-group-item d-flex justify-content-between align-items-start">
+                <div class="user-profile-image d-flex justify-content-between align-items-start">
+                    @if($comment->user->profile_image)
+                        <img class="img-fluid" style="max-width: 40px; max-height: 40px; border-radius: 10px; margin-right: 10px;"
+                        src="{{ asset('storage/images/profile/' . $comment->user->profile_image) }}" alt="User Profile Image">
+                    @else
+                        <img class="img-fluid" style="max-width: 40px; max-height: 40px; border-radius: 10px; margin-right: 10px;"
+                        src="{{ asset('images/profile-placeholder.png') }}" alt="Generic placeholder profile">
+                    @endif
+                    <p>
+                        <a href="{{ route('users.show', $comment->user->id) }}" style="text-decoration: none; color: inherit; font-weight: 500">
+                            {{ $comment->user->name }}:
+                        </a>
+                        {{ $comment->body }}
+                    </p>
+                </div>
 
                 <div class="d-flex align-items-center">
                 <span class="badge bg-secondary" style="height: fit-content">{{ $comment->created_at->diffForHumans() }}</span>
@@ -37,14 +34,14 @@
                     </form>
                 @endif
                 </div>
-            </div>
+            </li>
         @endforeach
 
         @if ($workout->comments->count() > 3)
             <button id="showMoreButton" class="btn btn-outline-primary">Show all comments</button>
         <div id="hiddenComments" style="display: none;">
             @foreach ($workout->comments->slice(3) as $comment)
-                <div class="comment d-flex align-items-baseline justify-content-between" style="font-size: 14px">
+                <div class="comment d-flex align-items-baseline justify-content-between">
                     <p>
                         <a href="{{ route('users.show', $comment->user->id) }}" style="text-decoration: none; color: inherit; font-weight: 500">
                             {{ $comment->user->name }}:
@@ -70,7 +67,7 @@
             @endforeach
         </div>
         @endif
-    </div>
+    </ul>
 
     <form action="/comments/store/{{ $workout->id }}" method="POST">
         @csrf

@@ -14,7 +14,8 @@ class Notification extends Model
         'read',
         'sender_id',
         'receiver_id',
-        'workout_id'
+        'workout_id',
+        'comment_id'
     ];
 
     public function sender()
@@ -30,6 +31,11 @@ class Notification extends Model
     public function workout()
     {
         return $this->belongsTo(Workout::class);
+    }
+
+    public function comment()
+    {
+        return $this->belongsTo(Comment::class);
     }
 
     public function markAsRead()

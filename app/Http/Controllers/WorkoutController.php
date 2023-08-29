@@ -122,12 +122,14 @@ class WorkoutController extends Controller
             'user_id' => Auth::user()->id,
         ]);
 
-        Notification::create([
-            'type' => 'like',
-            'sender_id' => Auth::user()->id,
-            'receiver_id' => $workout->user_id,
-            'workout_id' => $request->id,
-        ]);
+        if($workout->user->id != Auth::user()->id){
+            Notification::create([
+                'type' => 'like',
+                'sender_id' => Auth::user()->id,
+                'receiver_id' => $workout->user_id,
+                'workout_id' => $request->id,
+            ]);
+        }
 
         return response()->json([
             'status' => 200,
@@ -157,12 +159,14 @@ class WorkoutController extends Controller
             'user_id' => Auth::user()->id,
         ]);
 
-        Notification::create([
-            'type' => 'join',
-            'sender_id' => Auth::user()->id,
-            'receiver_id' => $workout->user_id,
-            'workout_id' => $request->id,
-        ]);
+        if($workout->user->id != Auth::user()->id){
+            Notification::create([
+                'type' => 'join',
+                'sender_id' => Auth::user()->id,
+                'receiver_id' => $workout->user_id,
+                'workout_id' => $request->id,
+            ]);
+        }
 
         return response()->json([
             'status' => 200,
@@ -174,12 +178,14 @@ class WorkoutController extends Controller
         $workout = Workout::find($request->id);
         $workout->joins()->where('user_id', Auth::user()->id)->delete();
 
-        Notification::create([
-            'type' => 'leave',
-            'sender_id' => Auth::user()->id,
-            'receiver_id' => $workout->user_id,
-            'workout_id' => $request->id,
-        ]);
+        if($workout->user->id != Auth::user()->id){
+            Notification::create([
+                'type' => 'leave',
+                'sender_id' => Auth::user()->id,
+                'receiver_id' => $workout->user_id,
+                'workout_id' => $request->id,
+            ]);
+        }
 
         return response()->json([
             'status' => 200,

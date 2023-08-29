@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Comment;
+use App\Models\Notification;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -21,6 +22,16 @@ class CommentController extends Controller
             'workout_id' => $workout_id,
             'user_id' => Auth::user()->id,
         ]);
+
+        if ($comment->workout->user->id != Auth::user()->id){
+        Notification::create([
+            'type' => 'comment',
+            'sender_id' => Auth::user()->id,
+            'receiver_id' => $comment->workout->user->id,
+            'workout_id' => $workout_id,
+            'comment_id' => $comment->id,
+        ]);
+        }
 
         $user = User::find(Auth::user()->id);
 

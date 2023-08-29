@@ -6,14 +6,13 @@
             <img src="{{ asset('storage/images/profile/' . $user->profile_image) }}" alt="Profile Image" class="img-fluid"
             style="width: 180px; height: 180px; border-radius: 10px;">
         @else
-            <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-profiles/avatar-1.webp"
-            alt="Generic placeholder image" class="img-fluid"
+            <img src="{{ asset('images/profile-placeholder.png') }}"
+            alt="Generic placeholder profile" class="img-fluid"
             style="width: 180px; height: 180px; border-radius: 10px;">
         @endif
     </div>
     <div class="flex-grow-1 ms-3">
         <h5 class="mb-1">{{ $user->name }}</h5>
-        <p class="mb-2 pb-1" style="color: #2b2a2a;">Senior Journalist</p>
         <div class="d-flex justify-content-start rounded-3 p-2 mb-2"
         style="background-color: #efefef;">
         <div>
