@@ -21,12 +21,17 @@
         </div>
         <div class="px-3">
             <p class="small text-muted mb-1">Follows</p>
-            <p id="{{ (Auth::user()->id == $user->id) ? 'followsAuth' : ''}}"
-                class="mb-0">{{ $user->follows->count() }}</p>
+            @if (Auth::user()->id == $user->id)
+                <p id="followsAuth" class="mb-0">{{ $user->follows->count() }}</p>
+            @else
+                <p id="follows{{ $show ? $show === 'follows' ? '1' : '2' : '' }}{{ $user->id }}"
+                    class="mb-0">{{ $user->follows->count() }}</p>
+            @endif
         </div>
         <div>
             <p class="small text-muted mb-1">Followers</p>
-            <p id="followers{{ $user->id }}" class="mb-0">{{ $user->followers->count() }}</p>
+            <p id="followers{{ $show ? $show === 'followers' ? '1' : '2' : '' }}{{ $user->id }}"
+                class="mb-0">{{ $user->followers->count() }}</p>
         </div>
         </div>
         <div class="d-flex pt-1">

@@ -119,7 +119,7 @@
 
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
-                                    data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>{{ Auth::user()->name }}
+                                    data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ Auth::user()->name }}
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-right fade-in" aria-labelledby="navbarDropdown">
@@ -149,48 +149,47 @@
             @yield('content')
         </main>
     </div>
-</body>
 
-<script>
-    // Function to trigger the search on input change
-    function triggerSearch() {
-        const searchTerm = document.getElementById('searchInput').value;
-        const searchResults = document.getElementById('searchResults');
+    <script>
+        // Function to trigger the search on input change
+        function triggerSearch() {
+            const searchTerm = document.getElementById('searchInput').value;
+            const searchResults = document.getElementById('searchResults');
 
-        if (searchTerm.trim() === '' || searchTerm.length < 3) {
-            // If the search term is empty, hide the search results container
-            searchResults.style.display = 'none';
-        } else {
-            // If there is a search term, show the search results container and make the AJAX request
-            searchResults.style.display = 'block';
-            fetch('{{ route('search') }}?term=' + searchTerm)
-                .then(response => response.text())
-                .then(data => {
-                    document.getElementById('searchResults').innerHTML = data;
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
+            if (searchTerm.trim() === '' || searchTerm.length < 3) {
+                // If the search term is empty, hide the search results container
+                searchResults.style.display = 'none';
+            } else {
+                // If there is a search term, show the search results container and make the AJAX request
+                searchResults.style.display = 'block';
+                fetch('{{ route('search') }}?term=' + searchTerm)
+                    .then(response => response.text())
+                    .then(data => {
+                        document.getElementById('searchResults').innerHTML = data;
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+            }
         }
-    }
 
-    // AJAX Search functionality on input change
-    document.getElementById('searchInput').addEventListener('input', function () {
-        triggerSearch();
-    });
+        // AJAX Search functionality on input change
+        document.getElementById('searchInput').addEventListener('input', function () {
+            triggerSearch();
+        });
 
-    // Call the triggerSearch function on page load to show initial results
-    document.addEventListener('DOMContentLoaded', function () {
-        triggerSearch();
-    });
+        // Call the triggerSearch function on page load to show initial results
+        document.addEventListener('DOMContentLoaded', function () {
+            triggerSearch();
+        });
 
-    document.getElementById('searchButton').addEventListener('click', function () {
-    const searchTerm = document.getElementById('searchInput').value;
-    window.location.href = '{{ route('searchView') }}?term=' + searchTerm;
-    });
-</script>
+        document.getElementById('searchButton').addEventListener('click', function () {
+        const searchTerm = document.getElementById('searchInput').value;
+        window.location.href = '{{ route('searchView') }}?term=' + searchTerm;
+        });
+    </script>
 
-<script>
+    <script>
     $(function() {
 
         // mark notification as read ajax request
@@ -323,6 +322,7 @@
             });
         }
     });
-</script>
+    </script>
+</body>
 
 </html>

@@ -75,3 +75,29 @@
 .dropdown-menu.fade-in {
     animation: fadeIn 0.3s ease-in-out;
 }
+
+.posts-container {
+    max-height: 77vh;
+    overflow-y: auto;
+    margin-bottom: 1rem;
+}
+
+.image-container {
+    position: relative;
+    overflow: hidden;
+}
+
+.image-container::before {
+    content: "";
+    display: block;
+    padding-top: 100%; /* This creates a square with 1:1 aspect ratio */
+}
+
+.image-container img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Maintain aspect ratio and cover the container */
+}

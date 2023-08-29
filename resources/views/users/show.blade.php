@@ -2,34 +2,6 @@
 
 @section('content')
 
-<style>
-    .posts-container {
-        max-height: 77vh;
-        overflow-y: auto;
-        margin-bottom: 1rem;
-    }
-
-    .image-container {
-        position: relative;
-        overflow: hidden;
-    }
-
-    .image-container::before {
-        content: "";
-        display: block;
-        padding-top: 100%; /* This creates a square with 1:1 aspect ratio */
-    }
-
-    .image-container img {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        object-fit: cover; /* Maintain aspect ratio and cover the container */
-    }
-</style>
-
 <div class="modal fade" id="followersModal" tabindex="-1" role="dialog" aria-labelledby="followersModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-scrollable modal-fullscreen-sm-down" role="document">
         <div class="modal-content">
@@ -40,7 +12,7 @@
             <div class="modal-body">
                 @if($user->followers->count() > 0)
                     @foreach ($user->followers as $follower)
-                        @include('users.card', ['user' => $follower, 'show' => true])
+                        @include('users.card', ['user' => $follower, 'show' => 'followers'])
                     @endforeach
                 @else
                     <p class="text-center">No followers yet.</p>
@@ -60,7 +32,7 @@
             <div class="modal-body">
                 @if($user->follows->count() > 0)
                     @foreach ($user->follows as $follow)
-                        @include('users.card', ['user' => $follow, 'show' => true])
+                        @include('users.card', ['user' => $follow, 'show' => 'follows'])
                     @endforeach
                 @else
                     <p class="text-center">No follows yet.</p>
@@ -87,7 +59,7 @@
                     <input type="text" class="form-control" id="title" name="title" placeholder="Enter title">
                 </div>
                 <div class="mb-3">
-                    <label for="type" class="form-label">Image</label>
+                    <label for="image" class="form-label">Image</label>
                     <input type="file" class="form-control" id="image" name="image">
                 </div>
                 <div class="mb-3">
@@ -111,11 +83,11 @@
                     <input type="number" class="form-control" id="duration" name="duration" placeholder="Enter duration">
                 </div>
                 <div class="mb-3">
-                    <label for="distance" class="form-label">Capacity</label>
+                    <label for="capacity" class="form-label">Capacity</label>
                     <input type="number" class="form-control" id="capacity" name="capacity" placeholder="Enter capacity">
                 </div>
                 <div class="mb-3">
-                    <label for="errors" class="form-errors text-danger"></label>
+                    <label class="form-errors text-danger"></label>
                 </div>
             </div>
             <div class="modal-footer">
@@ -273,7 +245,7 @@
             });
         });
 
-        // delete employee ajax request
+        // delete workout ajax request
       $(document).on('click', '.deleteIcon', function(e) {
         e.preventDefault();
         let id = $(this).attr('id');
@@ -297,6 +269,87 @@
                 console.log(error);
             }
         });
+        });
+
+        // like workout ajax request
+        $(document).on('click', '.like-button', function(e) {
+            e.preventDefault();
+            let workoutId = $(this).attr('data-workout-id');
+            let csrf = '{{ csrf_token() }}';
+            let likeButton = document.querySelector('#like-button' + workoutId);
+            let isLiked = likeButton.textContent.trim() === 'Dislike';
+            $.ajax({
+                url: `/workouts/${isLiked ? 'dislike' : 'like'}/${workoutId}`,
+                method: 'post',
+                data: {
+                _token: csrf
+                },
+                success: function(data) {
+                    console.log('success');
+                    console.log(data);
+                    if(data.status == 200) {
+                        console.log(data.message);
+                        // Update button text
+                        likeButton.textContent = isLiked ? 'Like' : 'Dislike';
+                        if(isLiked){
+                            $('#like-count' + workoutId).text(parseInt($('#like-count' + workoutId).text()) - 1);
+                            likeButton.classList.remove('btn-secondary');
+                            likeButton.classList.add('btn-primary');
+                        } else {
+                            $('#like-count' + workoutId).text(parseInt($('#like-count' + workoutId).text()) + 1);
+                            likeButton.classList.remove('btn-primary');
+                            likeButton.classList.add('btn-secondary');
+                        }
+                    }
+                },
+                error: function(error) {
+                    console.log('error');
+                    console.log(error);
+                }
+            });
+        });
+
+        // join workout ajax request
+        $(document).on('click', '.join-button', function(e) {
+            e.preventDefault();
+            let workoutId = $(this).attr('data-workout-id');
+            let csrf = '{{ csrf_token() }}';
+            let joinButton = document.querySelector('#join-button' + workoutId);
+            let isJoined = joinButton.textContent.trim() === 'Leave';
+            $.ajax({
+                url: `/workouts/${isJoined ? 'leave' : 'join'}/${workoutId}`,
+                method: 'post',
+                data: {
+                _token: csrf
+                },
+                success: function(data) {
+                    console.log('success');
+                    console.log(data);
+                    if(data.status == 200) {
+                        console.log(data.message);
+                        // Update button text
+                        joinButton.textContent = isJoined ? 'Join' : 'Leave';
+                        if(isJoined){
+                            $('#join-count' + workoutId).text(parseInt($('#join-count' + workoutId).text()) - 1);
+                            joinButton.classList.remove('btn-secondary');
+                            joinButton.classList.add('btn-primary');
+                        } else {
+                            $('#join-count' + workoutId).text(parseInt($('#join-count' + workoutId).text()) + 1);
+                            joinButton.classList.remove('btn-primary');
+                            joinButton.classList.add('btn-secondary');
+                        }
+                    } else if(data.status == 400) {
+                        console.log(data.message);
+                        $('#join-count' + workoutId).text(parseInt($('#join-count' + workoutId).text()) + 1);
+                        joinButton.textContent = 'Full';
+                        joinButton.disabled = true;
+                    }
+                },
+                error: function(error) {
+                    console.log('error');
+                    console.log(error);
+                }
+            });
         });
 
         fetchAllWorkouts();
