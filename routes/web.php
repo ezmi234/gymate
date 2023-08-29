@@ -25,6 +25,7 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/explore', [App\Http\Controllers\HomeController::class, 'explore'])->name('explore');
 Route::get('/search', [App\Http\Controllers\HomeController::class, 'search'])->name('search');
 Route::get('/searchView', [App\Http\Controllers\HomeController::class, 'searchView'])->name('searchView');
 Route::get('/fetchAllWorkouts', [App\Http\Controllers\HomeController::class, 'fetchAllWorkouts'])->name('fetchAllWorkouts');

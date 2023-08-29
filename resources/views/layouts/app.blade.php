@@ -63,30 +63,24 @@
                                     href="{{ route('home') }}">Home</a>
                             </li>
 
-                            <li class="nav-item" style="margin-right: 20px">
-                                <div style="display: flex">
-                                    <a class="nav-link btn position-relative" href="" data-bs-toggle="modal" data-bs-target="#notificationsModal">
-                                        Notifications
-                                        @if( auth()->user()->unreadNotifications->count() > 0 )
-                                            <span id="notificationCounter" class="position-absolute start-100 translate-middle badge rounded-pill bg-danger" style="top: auto">
-                                                {{ auth()->user()->unreadNotifications->count() }}
-                                            </span>
-                                        @endif
-                                    </a>
-                                </div>
+                            <li class="nav-item">
+                                <a class="nav-link  {{ request()->is('explore*') ? 'text-primary' : '' }}"
+                                    href="{{ route('explore') }}">Explore</a>
                             </li>
 
-                            <div class="search-container">
-                                <!-- Search Users with ajax -->
-                                <form id="searchForm" class="d-flex">
-                                    <input id="searchInput" class="form-control me-2" type="search" placeholder="Search users" aria-label="Search">
-                                    <button class="btn btn-outline-primary" type="button" id="searchButton">Search</button>
-                                </form>
+                            <li class="nav-item">
+                                <div class="search-container">
+                                    <!-- Search Users with ajax -->
+                                    <form id="searchForm" class="d-flex">
+                                        <input id="searchInput" class="form-control me-2" type="search" placeholder="Search users" aria-label="Search">
+                                        <button class="btn btn-outline-primary" type="button" id="searchButton">Search</button>
+                                    </form>
 
-                                <div id="searchResults" class="mt-1 border-0">
-                                    <!-- AJAX results will be displayed here -->
+                                    <div id="searchResults" class="mt-1 border-0">
+                                        <!-- AJAX results will be displayed here -->
+                                    </div>
                                 </div>
-                            </div>
+                            </li>
 
 
 
@@ -109,6 +103,19 @@
                                 </li>
                             @endif
                         @else
+                            <li class="nav-item" style="margin-right: 15px">
+                                <div style="display: flex">
+                                    <a class="nav-link btn position-relative" href="" data-bs-toggle="modal" data-bs-target="#notificationsModal">
+                                        Notifications
+                                        @if( auth()->user()->unreadNotifications->count() > 0 )
+                                            <span id="notificationCounter" class="position-absolute start-100 translate-middle badge rounded-pill bg-danger" style="top: auto">
+                                                {{ auth()->user()->unreadNotifications->count() }}
+                                            </span>
+                                        @endif
+                                    </a>
+                                </div>
+                            </li>
+
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
                                     data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>{{ Auth::user()->name }}

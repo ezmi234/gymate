@@ -31,14 +31,10 @@ class HomeController extends Controller
         return view('home');
     }
 
-    public function adminHome()
+    public function explore()
     {
-        return view('adminHome');
-    }
-
-    public function userHome()
-    {
-        return view('userHome');
+        $workouts = Workout::all();
+        return view('explore');
     }
 
     public function search(Request $request)
@@ -65,12 +61,17 @@ class HomeController extends Controller
             ->with('allUsers', User::all());
     }
 
-    public function fetchAllWorkouts()
+    public function fetchAllWorkouts(Request $request)
     {
-        //get all workouts of all users followed by the current user
-        $user = User::find(Auth::user()->id);
-        $follows = $user->follows()->pluck('follow_id');
-        $workouts = DB::table('workouts')->whereIn('user_id', $follows)->get();
+        $explore = $request->explore;
+        if($explore){
+            $workouts = Workout::all();
+        }else{
+            //get all workouts of all users followed by the current user
+            $user = User::find(Auth::user()->id);
+            $follows = $user->follows()->pluck('follow_id');
+            $workouts = DB::table('workouts')->whereIn('user_id', $follows)->get();
+        }
 
         $output = '';
         if ($workouts->isEmpty()) {
