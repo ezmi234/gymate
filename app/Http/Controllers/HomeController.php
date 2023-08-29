@@ -79,7 +79,9 @@ class HomeController extends Controller
         foreach ($workouts as $workout){
             $date = Carbon::parse($workout->date)->format('d/m/Y');
             $path = asset('storage/images/workouts/'.$workout->image);
-            $output .='<h4>'.Workout::find($workout->id)->user->name.'
+            $output .='<a style="text-decoration: none; color: inherit; font-weight: 500" href="'.route('users.show', $workout->user_id).'">
+                <h4>'.Workout::find($workout->id)->user->name.'</h4>
+            </a>
             <div class="card mb-4">
                 <img src="'.$path.'" alt="Workout image" class="img-fluid rounded" style="height: 40vh">
                 <div class="card-body">
@@ -105,7 +107,11 @@ class HomeController extends Controller
 
             $output .='
                 </div>
-            </div>
+            </div>';
+
+            $output .= view('partials.reaction' , ['workout' => Workout::find($workout->id)])->render();
+
+            $output .= '
             <div class="card mb-4">
             <div class="card-body ">'
             ;

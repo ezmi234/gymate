@@ -42,8 +42,8 @@
 
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm fixed-top">
             <div class="container">
-                <a class="navbar-brand" href="{{ url('/') }}">
-                    <strong>Gymate</strong>
+                <a class="navbar-brand" style="font-size: x-large; font-weight: 500" href="{{ url('/') }}">
+                    Gymate
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>
@@ -189,6 +189,56 @@
 <script>
     $(function() {
 
+        // mark notification as read ajax request
+        $(document).on('click', '.read-notification', function(e) {
+            e.preventDefault();
+            const notificationId = $(this).attr('id');
+            $.ajax({
+                url: '{{ route('markAsRead') }}',
+                method: 'post',
+                data: {
+                    notificationId: notificationId,
+                    _token: '{{ csrf_token() }}'
+                },
+                success: function(data) {
+                    console.log('success');
+                    console.log(data);
+                    if (data.status == 200) {
+                        fetchAllNotifications();
+                        $('#notificationCounter').html(data.unreadNotificationsCount);
+                    }
+                },
+                error: function(error) {
+                    console.log('error');
+                    console.log(error);
+                }
+            });
+        });
+
+        // mark all notifications as read ajax request
+        $(document).on('click', '.read-all-notifications', function(e) {
+            e.preventDefault();
+            $.ajax({
+                url: '{{ route('markAllAsRead') }}',
+                method: 'post',
+                data: {
+                    _token: '{{ csrf_token() }}'
+                },
+                success: function(data) {
+                    console.log('success');
+                    console.log(data);
+                    if (data.status == 200) {
+                        fetchAllNotifications();
+                        $('#notificationCounter').html(data.unreadNotificationsCount);
+                    }
+                },
+                error: function(error) {
+                    console.log('error');
+                    console.log(error);
+                }
+            });
+        });
+
         // delete notification ajax request
         $(document).on('click', '.delete-notification', function(e) {
             e.preventDefault();
@@ -198,6 +248,30 @@
                 method: 'delete',
                 data: {
                     notificationId: notificationId,
+                    _token: '{{ csrf_token() }}'
+                },
+                success: function(data) {
+                    console.log('success');
+                    console.log(data);
+                    if (data.status == 200) {
+                        fetchAllNotifications();
+                        $('#notificationCounter').html(data.unreadNotificationsCount);
+                    }
+                },
+                error: function(error) {
+                    console.log('error');
+                    console.log(error);
+                }
+            });
+        });
+
+        // delete all notifications ajax request
+        $(document).on('click', '.delete-all-notifications', function(e) {
+            e.preventDefault();
+            $.ajax({
+                url: '{{ route('deleteAllNotifications') }}',
+                method: 'delete',
+                data: {
                     _token: '{{ csrf_token() }}'
                 },
                 success: function(data) {

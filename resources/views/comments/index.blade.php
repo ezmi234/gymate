@@ -17,7 +17,7 @@
         @foreach ($workout->comments->take(3) as $comment)
             <div class="comment d-flex align-items-baseline justify-content-between" style="font-size: 14px">
                 <p>
-                    <a href="{{ route('users.show', $comment->user->id) }}" style="text-decoration: none; color: inherit; font-weight: 600">
+                    <a href="{{ route('users.show', $comment->user->id) }}" style="text-decoration: none; color: inherit; font-weight: 500">
                         {{ $comment->user->name }}:
                     </a>
                     {{ $comment->body }}
@@ -32,7 +32,7 @@
                         @csrf
                         @method('DELETE')
                         <button type="submit" class="btn btn-outline-danger btn-sm" style="margin-left: 3px">
-                            <i class="bi-trash h4"></i>
+                            <i class="bi-trash h5"></i>
                         </button>
                     </form>
                 @endif
@@ -46,7 +46,7 @@
             @foreach ($workout->comments->slice(3) as $comment)
                 <div class="comment d-flex align-items-baseline justify-content-between" style="font-size: 14px">
                     <p>
-                        <a href="{{ route('users.show', $comment->user->id) }}" style="text-decoration: none; color: inherit; font-weight: 600">
+                        <a href="{{ route('users.show', $comment->user->id) }}" style="text-decoration: none; color: inherit; font-weight: 500">
                             {{ $comment->user->name }}:
                         </a>
                         {{ $comment->body }}
@@ -61,7 +61,7 @@
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-outline-danger btn-sm" style="margin-left: 3px">
-                                    <i class="bi-trash h4"></i>
+                                    <i class="bi-trash h5"></i>
                                 </button>
                             </form>
                         @endif

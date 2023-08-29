@@ -20,10 +20,13 @@ return new class extends Migration
             $table->unsignedBigInteger('sender_id');
             $table->unsignedBigInteger('receiver_id');
             $table->unsignedBigInteger('workout_id')->nullable();
+            $table->unsignedBigInteger('comment_id')->nullable();
+
 
             $table->foreign('sender_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('receiver_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('workout_id')->references('id')->on('workouts')->onDelete('cascade');
+            $table->foreign('comment_id')->references('id')->on('comments')->onDelete('cascade');
 
         });
     }

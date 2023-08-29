@@ -32,5 +32,11 @@ class Notification extends Model
         return $this->belongsTo(Workout::class);
     }
 
+    public function markAsRead()
+    {
+        $this->read = true;
+        $this->save();
+    }
+
 
 }

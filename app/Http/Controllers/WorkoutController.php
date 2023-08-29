@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Notification;
 use App\Models\Workout;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -120,6 +121,14 @@ class WorkoutController extends Controller
             'workout_id' => $request->id,
             'user_id' => Auth::user()->id,
         ]);
+
+        Notification::create([
+            'type' => 'like',
+            'sender_id' => Auth::user()->id,
+            'receiver_id' => $workout->user_id,
+            'workout_id' => $request->id,
+        ]);
+
         return response()->json([
             'status' => 200,
             'message' => 'Liked',
@@ -147,6 +156,14 @@ class WorkoutController extends Controller
             'workout_id' => $request->id,
             'user_id' => Auth::user()->id,
         ]);
+
+        Notification::create([
+            'type' => 'join',
+            'sender_id' => Auth::user()->id,
+            'receiver_id' => $workout->user_id,
+            'workout_id' => $request->id,
+        ]);
+
         return response()->json([
             'status' => 200,
             'message' => 'Joined',
@@ -156,6 +173,14 @@ class WorkoutController extends Controller
     public function leave(Request $request) {
         $workout = Workout::find($request->id);
         $workout->joins()->where('user_id', Auth::user()->id)->delete();
+
+        Notification::create([
+            'type' => 'leave',
+            'sender_id' => Auth::user()->id,
+            'receiver_id' => $workout->user_id,
+            'workout_id' => $request->id,
+        ]);
+
         return response()->json([
             'status' => 200,
             'message' => 'Left',

@@ -17,32 +17,40 @@ class NotificationController extends Controller
             return response()->json(['message' => 'No notifications found'], 404);
         }
         else{
-            $output .= '<ul class="list-group">';
+            $output .= '<ul class="list-group">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <a style="text-decoration: none;" href="#" class="text-info read-all-notifications">Read all</a>
+                            <a style="text-decoration: none;" href="#" class="text-danger delete-all-notifications">Delete all</a>
+                        </div>';
             foreach ($notifications as $notification){
                 $output .= '<li class="list-group-item d-flex justify-content-between align-items-start">
+                <div class="user-profile-image">
+                    <img class="img-fluid" style="width: 40px; height: 40px; border-radius: 10px;"
+                    src="' . asset('storage/images/profile').'/' . User::find($notification->sender_id)->profile_image . '" alt="User Profile Image">
+                </div>
                 <div class="ms-2 me-auto">
-                    <div class="fw-bold"><a href="'.route('users.show', User::find($notification->sender_id)).'">'.User::find($notification->sender_id)->name.'</a>';
+                    <div class="fw"><a style="text-decoration: none;" class="text-primary" href="'.route('users.show', User::find($notification->sender_id)).'">'.User::find($notification->sender_id)->name.'</a>';
 
                 if($notification->type == 'follow'){
                     $output .= ' started following you';
                 }
                 else if($notification->type == 'like'){
-                    $output .= ' liked your workout';
+                    $output .= ' liked your workout: <span style="font-weight: 500;">'.Notification::find($notification->id)->workout->title.'</span>';
                 }
                 else if($notification->type == 'join'){
-                    $output .= ' joined your workout';
+                    $output .= ' joined your workout: <span style="font-weight: 500;">'.Notification::find($notification->id)->workout->title.'</span>';
                 }
                 else if($notification->type == 'leave'){
-                    $output .= ' left your workout';
+                    $output .= ' left your workout: <span style="font-weight: 500;">'.Notification::find($notification->id)->workout->title.'</span>';
                 }
 
                 $output .= '</div>
                     <small>'.$notification->created_at->diffForHumans().'</small>
                 </div>';
                 if (!$notification->read){
-                    $output .= '<a href="#" id="'.$notification->id.'" class="text-primary mx-1"><i class="bi-eye h4"></i></a>';
+                    $output .= '<a href="#" id="'.$notification->id.'" class="text-primary mx-1 read-notification"><i class="bi-eye h5"></i></a>';
                 }
-                $output .= '<a href="#" id="'.$notification->id.'" class="text-danger mx-1 delete-notification"><i class="bi-trash h4"></i></a>
+                $output .= '<a href="#" id="'.$notification->id.'" class="text-danger mx-1 delete-notification"><i class="bi-trash h5"></i></a>
                 </li>';
             }
             $output .= '</ul>';
@@ -55,11 +63,22 @@ class NotificationController extends Controller
 
     public function markAsRead(Request $request)
     {
-        $notification = Notification::find($request->id);
-        $notification->read = true;
-        $notification->save();
+        Notification::find($request->notificationId)->markAsRead();
         return response()->json([
             'status' => 200,
+            'unreadNotificationsCount' => User::find(auth()->user()->id)->unreadNotifications()->count(),
+        ]);
+    }
+
+    public function markAllAsRead()
+    {
+        $user = User::find(auth()->user()->id);
+        foreach ($user->unreadNotifications as $notification){
+            $notification->markAsRead();
+        }
+        return response()->json([
+            'status' => 200,
+            'unreadNotificationsCount' => User::find(auth()->user()->id)->unreadNotifications()->count(),
         ]);
     }
 
@@ -67,6 +86,27 @@ class NotificationController extends Controller
     {
         try{
             Notification::destroy($request->notificationId);
+        }
+        catch (\Exception $e){
+            return response()->json([
+                'status' => 500,
+                'message' => 'Something went wrong',
+                'error' => $e->getMessage(),
+            ]);
+        }
+        return response()->json([
+            'status' => 200,
+            'unreadNotificationsCount' => User::find(auth()->user()->id)->unreadNotifications()->count(),
+        ]);
+    }
+
+    public function deleteAll()
+    {
+        try{
+            $user = User::find(auth()->user()->id);
+            foreach ($user->notifications as $notification){
+                $notification->delete();
+            }
         }
         catch (\Exception $e){
             return response()->json([
